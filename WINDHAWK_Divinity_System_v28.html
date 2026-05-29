@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WINDHAWK Centric Divinity Selection System</title>
+
+  <!-- PWA app settings -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0e1118" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="WINDHAWK Divinity" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <style>
+    :root{
+      --bg:#0e1118;
+      --panel:#151a24;
+      --panel2:#1b2230;
+      --card:#10151f;
+      --text:#eef3ff;
+      --muted:#9da9bd;
+      --line:#2a3448;
+      --accent:#89b4ff;
+      --accent2:#b797ff;
+      --good:#53d397;
+      --warn:#ffcc66;
+      --bad:#ff7777;
+      --gold:#f5c75b;
+      --purple:#b686ff;
+      --blue:#74a8ff;
+      --shadow:0 18px 60px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:radial-gradient(circle at top left, rgba(137,180,255,.18), transparent 38%),
+                 radial-gradient(circle at 80% 0%, rgba(183,151,255,.12), transparent 34%),
+                 var(--bg);
+      color:var(--text);
+    }
+    header{
+      padding:34px 24px 20px;
+      max-width:1280px;
+      margin:auto;
+    }
+    .hero{
+      border:1px solid rgba(137,180,255,.28);
+      background:linear-gradient(135deg, rgba(21,26,36,.92), rgba(16,21,31,.82));
+      border-radius:28px;
+      padding:28px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:after{
+      content:"";
+      position:absolute;
+      width:260px;
+      height:260px;
+      border-radius:50%;
+      right:-90px;
+      top:-110px;
+      background:rgba(137,180,255,.16);
+      filter:blur(4px);
+    }
+    h1{font-size:clamp(28px,4vw,48px);margin:0 0 10px;letter-spacing:-.04em}
+    .subtitle{color:var(--muted);max-width:850px;line-height:1.55;margin:0}
+    .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .pill{border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:999px;padding:7px 11px;color:#dbe6ff;font-size:12px}
+    main{max-width:1280px;margin:auto;padding:0 24px 34px;display:grid;gap:18px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .grid-3{display:grid;grid-template-columns:1.15fr .85fr .85fr;gap:18px}
+    .panel{
+      background:linear-gradient(180deg, rgba(21,26,36,.96), rgba(16,21,31,.96));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .panel h2,.panel h3{margin:0 0 12px;letter-spacing:-.025em}
+    .panel h2{font-size:21px}.panel h3{font-size:17px}
+    label{font-size:12px;color:var(--muted);display:block;margin:12px 0 6px}
+    select,input,button,textarea{
+      font:inherit;
+    }
+    select,input[type="text"],input[type="number"],input[type="password"],textarea{
+      width:100%;
+      background:#0d121b;
+      color:var(--text);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:11px 12px;
+      outline:none;
+    }
+    select:focus,input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(137,180,255,.12)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    button{
+      border:0;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#07101e;
+      font-weight:800;
+      border-radius:13px;
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.15s transform ease, .15s filter ease;
+    }
+    button:hover{transform:translateY(-1px);filter:brightness(1.04)}
+    button.secondary{background:#20293a;color:var(--text);border:1px solid var(--line)}
+    button.danger{background:#3a2024;color:#ffd9df;border:1px solid rgba(255,119,119,.35)}
+    button.small{padding:8px 10px;font-size:12px;border-radius:10px}
+    .checkgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:260px;overflow:auto;padding:4px}
+    .check{
+      display:flex;align-items:center;gap:8px;
+      background:#0d121b;border:1px solid var(--line);border-radius:12px;padding:9px;font-size:12px;color:#d9e3f8;
+    }
+    .check input{width:auto}
+    .statLineGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:6px}
+    .statLineCard{background:#0d121b;border:1px solid var(--line);border-radius:14px;padding:10px}
+    .statLineCard label{margin-top:0}
+    .hint{font-size:12px;color:var(--muted);line-height:1.45;margin:8px 0 0}
+    .scoreBig{font-size:44px;font-weight:900;letter-spacing:-.06em;margin:8px 0 0}
+    .quality{font-weight:800;border-radius:999px;padding:3px 8px;font-size:11px;display:inline-block}
+    .Gold{background:rgba(245,199,91,.14);color:var(--gold);border:1px solid rgba(245,199,91,.45)}
+    .Purple{background:rgba(182,134,255,.14);color:var(--purple);border:1px solid rgba(182,134,255,.45)}
+    .Blue{background:rgba(116,168,255,.14);color:var(--blue);border:1px solid rgba(116,168,255,.45)}
+    table{width:100%;border-collapse:separate;border-spacing:0 9px}
+    th{font-size:11px;color:var(--muted);text-align:left;font-weight:700;padding:0 8px}
+    td{background:#0d121b;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 8px;font-size:13px;vertical-align:top}
+    td:first-child{border-left:1px solid var(--line);border-radius:12px 0 0 12px}
+    td:last-child{border-right:1px solid var(--line);border-radius:0 12px 12px 0}
+    .muted{color:var(--muted)}
+    .tags{display:flex;gap:6px;flex-wrap:wrap}
+    .tag{font-size:11px;border:1px solid var(--line);background:#151b27;border-radius:999px;padding:4px 7px;color:#cdd8ec}
+    .bar{height:8px;border-radius:99px;background:#252f41;overflow:hidden;margin-top:6px}
+    .bar > span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%}
+    .notice{border:1px solid rgba(255,204,102,.35);background:rgba(255,204,102,.08);color:#ffedbc;padding:12px;border-radius:14px;font-size:13px;line-height:1.45}
+    .good{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+    .cards{display:grid;gap:10px}
+    .miniCard{background:#0d121b;border:1px solid var(--line);border-radius:14px;padding:12px}
+    .miniCard b{display:block;margin-bottom:4px}.miniCard p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
+    .footer{color:var(--muted);font-size:12px;line-height:1.5;text-align:center;padding:8px 16px 30px}
+    .hidden{display:none!important}
+    .toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+    .search{max-width:360px}
+    .setBox{display:grid;gap:8px}.setLine{display:flex;justify-content:space-between;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:12px;background:#0d121b;font-size:13px}
+    .statValueInput{min-width:84px;padding:8px 9px;border-radius:10px;font-size:12px}
+    .statusText{font-size:12px;color:var(--muted);margin-left:6px}
+    .tabs{max-width:1280px;margin:0 auto 16px;padding:0 24px;display:flex;gap:10px;flex-wrap:wrap}
+    .tabBtn{background:#10151f;border:1px solid var(--line);color:var(--text);border-radius:999px;padding:10px 14px;cursor:pointer;font-weight:700}
+    .tabBtn.active{border-color:rgba(137,180,255,.85);background:rgba(137,180,255,.16)}
+    .tabSection{display:block}
+    .recommendSummary{border:1px solid rgba(83,211,151,.35);background:rgba(83,211,151,.07);border-radius:16px;padding:14px;margin:12px 0}
+    .summaryGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+    .summaryLine{background:#0d121b;border:1px solid var(--line);border-radius:12px;padding:10px;font-size:13px}
+    .attributeOverview{margin-top:14px;border:1px solid rgba(137,180,255,.35);background:#f6f9ff;color:#4c5a72;border-radius:18px;padding:14px;box-shadow:0 10px 26px rgba(0,0,0,.10)}
+    .attributeOverviewHeader{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 12px}
+    .attributeOverviewTitle{background:#5f6878;color:white;border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:8px 22px;font-weight:800;letter-spacing:.2px;text-align:center}
+    .attributeOverviewSub{font-size:12px;color:#66758f;text-align:center;margin:-6px 0 12px;line-height:1.35}
+    .attributeGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px}
+    .attributePill{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;min-height:32px;border:1px solid #b8cbea;background:#edf4ff;border-radius:999px;overflow:hidden}
+    .attributeName{background:#b9c8e4;color:#536176;font-size:12px;font-weight:800;text-align:center;padding:8px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .attributeValue{min-width:76px;text-align:center;color:#52637d;font-size:16px;font-weight:900;padding:7px 12px;background:#f7fbff}
+    .attributeEmpty{padding:10px;text-align:center;color:#66758f;font-size:13px}
+
+
+    .targetOverview{margin-top:14px;border:1px solid rgba(83,211,151,.32);background:rgba(83,211,151,.06);border-radius:16px;padding:14px}
+    .targetOverview h3{margin:0 0 4px;font-size:16px}
+    .targetGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+    .targetCard{background:#0d121b;border:1px solid var(--line);border-radius:14px;padding:11px}
+    .targetCard b{display:block;font-size:13px;margin-bottom:4px}
+    .targetNumbers{font-size:12px;color:var(--muted);line-height:1.45}
+    .miniBar{height:7px;border-radius:99px;background:#252f41;overflow:hidden;margin-top:8px}
+    .miniBar span{display:block;height:100%;background:linear-gradient(90deg,var(--good),var(--accent));width:0%}
+    .calcGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .calcGrid label{margin-top:8px}
+    .calcSummary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+    .calcMetric{background:#0d121b;border:1px solid var(--line);border-radius:14px;padding:11px}
+    .calcMetric b{display:block;font-size:18px;margin-top:2px}
+
+    .authShell{
+      min-height:100vh;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:radial-gradient(circle at top left, rgba(137,180,255,.22), transparent 40%),
+                 radial-gradient(circle at 80% 0%, rgba(183,151,255,.16), transparent 36%),
+                 var(--bg);
+    }
+    body.authLocked .authShell{display:flex}
+    body.authLocked > header,
+    body.authLocked > main,
+    body.authLocked > .footer{display:none!important}
+    .authCard{
+      width:min(960px,100%);
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      background:linear-gradient(135deg, rgba(21,26,36,.96), rgba(16,21,31,.94));
+      border:1px solid rgba(137,180,255,.28);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:22px;
+    }
+    .authIntro{padding:8px 10px}
+    .authIntro h1{font-size:clamp(28px,4vw,44px)}
+    .authPanel{background:#0d121b;border:1px solid var(--line);border-radius:20px;padding:18px}
+    .authSwitch{display:flex;gap:8px;margin:8px 0 14px}
+    .authSwitch button{flex:1}
+    .authMessage{min-height:20px;font-size:12px;line-height:1.4;margin-top:10px;color:var(--muted)}
+    .authMessage.error{color:var(--bad)}
+    .authMessage.success{color:var(--good)}
+    .userBar{margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:rgba(13,18,27,.72);border:1px solid var(--line);border-radius:16px;padding:10px 12px;position:relative;z-index:1}
+    .userBarText{font-size:13px;color:#dbe6ff}
+    .userBarText b{color:var(--text)}
+    @media (max-width:760px){.authCard{grid-template-columns:1fr}.authIntro{padding:0}.userBar{align-items:flex-start}}
+
+    @media (max-width:980px){.grid,.grid-3,.row,.row3,.calcGrid,.calcSummary,.summaryGrid,.attributeGrid,.targetGrid{grid-template-columns:1fr}.checkgrid{grid-template-columns:1fr}}
+    @media print{body{background:white;color:#111}.panel,.hero{box-shadow:none;background:white;color:#111;border-color:#ccc}.subtitle,.muted,.hint{color:#555}button,.noPrint{display:none!important}td,select,input{background:white;color:#111;border-color:#ccc}.tag{color:#111;background:white;border-color:#ccc}}
+  </style>
+</head>
+<body class="authLocked">
+
+  <section id="authShell" class="authShell">
+    <div class="authCard">
+      <div class="authIntro">
+        <h1>WINDHAWK Centric Divinity Selection System Login</h1>
+        <p class="subtitle">Login first before accessing the WINDHAWK Centric Divinity Selection System. Accounts are saved locally in this browser for your character profile.</p>
+        <div class="pillrow">
+          <span class="pill">Name</span>
+          <span class="pill">IGN</span>
+          <span class="pill">Class</span>
+          <span class="pill">Username + password</span>
+          <span class="pill">Local browser access</span>
+        </div>
+        <div class="notice" style="margin-top:16px">Your login profile is stored only in this browser using local storage. Use Sign Up once, then login with your username and password. Each account has its own blank Divinity workspace, so a new sign-up will not use another account’s saved inventory or settings.</div>
+      </div>
+      <div class="authPanel">
+        <div class="authSwitch">
+          <button type="button" id="showLoginBtn" class="small">Login</button>
+          <button type="button" id="showSignupBtn" class="secondary small">Sign Up</button>
+        </div>
+        <div id="loginPanel">
+          <h2 style="margin:0 0 8px">Login</h2>
+          <label>Username</label>
+          <input type="text" id="loginUsername" autocomplete="username" placeholder="Enter username">
+          <label>Password</label>
+          <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Enter password">
+          <div class="btns">
+            <button type="button" id="loginBtn">Login and Open System</button>
+          </div>
+        </div>
+        <div id="signupPanel" class="hidden">
+          <h2 style="margin:0 0 8px">Sign Up</h2>
+          <div class="row">
+            <div>
+              <label>Name</label>
+              <input type="text" id="signupName" placeholder="Your name">
+            </div>
+            <div>
+              <label>IGN</label>
+              <input type="text" id="signupIgn" placeholder="In-game name">
+            </div>
+          </div>
+          <label>Class</label>
+          <input type="text" id="signupClass" placeholder="Example: Wind Hawk, Archbishop, etc.">
+          <div class="row">
+            <div>
+              <label>Username</label>
+              <input type="text" id="signupUsername" autocomplete="username" placeholder="Create username">
+            </div>
+            <div>
+              <label>Password</label>
+              <input type="password" id="signupPassword" autocomplete="new-password" placeholder="Create password">
+            </div>
+          </div>
+          <div class="btns">
+            <button type="button" id="signupBtn">Create Account and Login</button>
+          </div>
+        </div>
+        <div id="authMessage" class="authMessage"></div>
+      </div>
+    </div>
+  </section>
+
+  <header>
+    <section class="hero">
+      <h1>WINDHAWK Centric Divinity Selection System</h1>
+      <p class="subtitle">Track your Spear, Hammer, Blade, Shackles, Halberd, Harp, Bow, and Scythe divinities. Select quality, stats, Flash, and affixes, then rank which ones are best for your current build.</p>
+      <div class="pillrow">
+        <span class="pill">8 Divinity categories</span>
+        <span class="pill">Gold / Purple / Blue</span>
+        <span class="pill">Stat value guide</span>
+        <span class="pill">Flash selector</span>
+        <span class="pill">Affix + set-effect tracker</span>
+        <span class="pill">Max Divinity Level 7</span>
+        <span class="pill">Combined element Enhance only</span>
+        <span class="pill">Final Anti-Crit added</span>
+        <span class="pill">Final Flee added</span>
+        <span class="pill">Ordered stat-line dropdowns v28</span>
+        <span class="pill">P.DMG / M.DMG Bonus added</span>
+        <span class="pill">Inventory category filter</span>
+        <span class="pill">Damage formula recommendation</span>
+        <span class="pill">Final P.DMG + Size priority v28</span>
+        <span class="pill">Flash priority scoring v28</span>
+        <span class="pill">Large-size DPS preset v28</span>
+        <span class="pill">Tabbed inventory + stat reference</span>
+        <span class="pill">Local save + export</span>
+      </div>
+      <div id="userBar" class="userBar noPrint hidden">
+        <div class="userBarText" id="userBarText">Logged in</div>
+        <button type="button" id="logoutBtn" class="secondary small">Logout</button>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <div class="tabs noPrint">
+      <button class="tabBtn active" data-tab-target="selector">Selector & Recommendation</button>
+      <button class="tabBtn" data-tab-target="inventory">Saved Divinity Inventory</button>
+      <button class="tabBtn" data-tab-target="statref">Editable Stat Value Reference</button>
+    </div>
+    <section class="grid-3 tabSection" data-tab="selector">
+      <div class="panel">
+        <h2>1) Build Target</h2>
+        <div class="row">
+          <div>
+            <label>Build profile</label>
+            <select id="buildProfile"></select>
+          </div>
+          <div>
+            <label>Recommendation style</label>
+            <select id="recommendStyle">
+              <option value="dpsPhysical" selected>Physical DPS balance priority</option>
+              <option value="needed">Needed stats match based</option>
+              <option value="damage">Damage formula based</option>
+              <option value="balanced">Balanced: stats + affix + quality</option>
+              <option value="stats">Stat-heavy</option>
+              <option value="affix">Affix-heavy / Oblivion Realm</option>
+              <option value="quality">Quality-heavy</option>
+            </select>
+          </div>
+        </div>
+        <label>Most needed stats for your build <span class="muted">(selection order matters)</span></label>
+        <div id="neededStatPickers" class="row3"></div>
+        <p class="hint" id="neededStatHint">Select your most needed stats first. The recommendation will prioritize Divinities that contain these stats in the same order.</p>
+        <details class="noPrint" style="margin-top:10px">
+          <summary class="muted" style="cursor:pointer">Optional: use build profile checkbox priorities instead</summary>
+          <div id="priorityStats" class="checkgrid" style="margin-top:10px"></div>
+        </details>
+        <p class="hint">Default recommendation now prioritizes Final P.DMG Bonus and Size Counter first. Attribute Counter / Element Enhance remains the next major DPS priority, followed by Crit DMG Bonus, Final Crit, Final ASPD, and DEX for balance.</p>
+      </div>
+
+      <div class="panel">
+        <h2>Score Preview</h2>
+        <div class="scoreBig" id="previewScore">0</div>
+        <div class="bar"><span id="previewBar"></span></div>
+        <p id="previewVerdict" class="hint">Select Divinity details to see its score.</p>
+        <div class="notice" style="margin-top:12px">Flash is treated as Gold-only. For damage recommendation, set the optional Flash Final DMG estimate in the Damage Formula Settings below; leave it as 0 if you only want Flash to act as a small score tie-breaker.</div>
+      </div>
+
+      <div class="panel">
+        <h2>Current Set Effects</h2>
+        <div id="setEffects" class="setBox"></div>
+        <p class="hint">Set effects are based on the number of saved Divinities with the same affix family.</p>
+      </div>
+    </section>
+
+    <section class="panel tabSection" data-tab="selector">
+      <h2>Damage Formula Settings for Recommendation</h2>
+      <div class="notice">This calculator uses the common ROX damage structure and a DPS comparison layer: ATK × PEN/DEF factor × Final DMG Bonus × Attribute Counter / Element Enhance × Skill/Passive × Size Counter × Size Modifier + flat P/M.DMG Bonus, then expected crit and Final ASPD for physical DPS. v28 is preset to your large-size centric build shown in the screenshots, without Divinity stats. Target size is set to Large and target attribute pair is set to Holy/Neutral Enhance. For Holy/Neutral, the preset uses the lower Holy value, 155.91%, as a conservative baseline; change Current Element Enhance to 223.92% when your target is Neutral. Flash priority is now enabled by default, using your Reaper's Scythe +7 Flash reference: same-element +84% Final DMG Bonus, different-element +28%, 10s duration / 20s cooldown, plus 5% extra race damage.</div>
+      <div class="notice" style="margin-top:10px"><b>Current build preset loaded:</b> P.ATK 17,413 · Final P.DMG Bonus 255.8% · Final ASPD 527.5% · Final Crit 42% · Crit DMG Bonus 815.2% · Large Size Counter 62% · Holy Enhance 155.91% / Neutral Enhance 223.92% · Flat P.DMG Bonus 5,064. Flash priority is ON by default.</div>
+      <div class="calcGrid noPrint">
+        <div><label>Damage type</label><select id="calcDamageType"><option value="auto">Auto by build</option><option value="physical" selected>Physical</option><option value="magic">Magic</option></select></div>
+        <div><label>Base P.ATK</label><input id="calcPAtk" type="number" value="17413" /></div>
+        <div><label>Base M.ATK</label><input id="calcMAtk" type="number" value="208" /></div>
+        <div><label>Minimum PEN/DEF factor %</label><input id="calcMinFactor" type="number" value="5" /></div>
+        <div><label>Final P.PEN %</label><input id="calcPPen" type="number" value="3" /></div>
+        <div><label>Target Final P.DEF %</label><input id="calcTargetPDef" type="number" value="0" /></div>
+        <div><label>P.DMG Bonus %</label><input id="calcPDmgPercent" type="number" value="0" /></div>
+        <div><label>Final P.DMG Bonus %</label><input id="calcFinalPDmgPercent" type="number" value="255.8" /></div>
+        <div><label>Current Final ASPD %</label><input id="calcASPD" type="number" value="527.5" /></div>
+        <div><label>Current DEX</label><input id="calcCurrentDex" type="number" value="0" /></div>
+        <div><label>P.ATK gained per 1 DEX</label><input id="calcPAtkPerDex" type="number" value="0" /></div>
+        <div><label>Flat P.DMG Bonus</label><input id="calcPFlatBonus" type="number" value="5064" /></div>
+        <div><label>Final M.PEN %</label><input id="calcMPen" type="number" value="3" /></div>
+        <div><label>Target Final M.DEF %</label><input id="calcTargetMDef" type="number" value="0" /></div>
+        <div><label>M.DMG Bonus %</label><input id="calcMDmgPercent" type="number" value="0" /></div>
+        <div><label>Flat M.DMG Bonus</label><input id="calcMFlatBonus" type="number" value="0" /></div>
+        <div><label>Current Attribute Counter / Element Enhance %</label><input id="calcElement" type="number" value="155.91" /></div>
+        <div><label>Target attribute pair</label><select id="calcElementTarget"><option value="Any">Any selected element</option></select></div>
+        <div><label>Skill / Passive DMG %</label><input id="calcSkill" type="number" value="0" /></div>
+        <div><label>Current Size Counter %</label><input id="calcRace" type="number" value="62" /></div>
+        <div><label>Target size for size bonus</label><select id="calcSizeTarget"><option value="Any">Any selected size</option><option value="Small">Small only</option><option value="Medium">Medium only</option><option value="Large" selected>Large only</option></select></div>
+        <div><label>Size Modifier %</label><input id="calcSize" type="number" value="100" /></div>
+        <div><label>Use expected crit?</label><select id="calcUseCrit"><option value="true" selected>Yes</option><option value="false">No</option></select></div>
+        <div><label>Final Crit %</label><input id="calcCrit" type="number" value="42" /></div>
+        <div><label>Target Final Anti-Crit %</label><input id="calcAntiCrit" type="number" value="0" /></div>
+        <div><label>Crit DMG Bonus %</label><input id="calcCritDmg" type="number" value="815.2" /></div>
+        <div><label>Base Crit Damage %</label><input id="calcBaseCritDmg" type="number" value="200" /></div>
+        <div><label>Prioritize Flash in recommendation?</label><select id="calcFlashPriority"><option value="true" selected>Yes, prioritize Flash</option><option value="false">No, small tie-break only</option></select></div>
+        <div><label>Flash element condition</label><select id="calcFlashElementMode"><option value="same" selected>Same as highest element</option><option value="different">Different from highest element</option><option value="manual">Use manual estimate only</option></select></div>
+        <div><label>Flash same-element Final DMG %</label><input id="calcFlashSameDmg" type="number" value="84" /></div>
+        <div><label>Flash different-element Final DMG %</label><input id="calcFlashDifferentDmg" type="number" value="28" /></div>
+        <div><label>Flash uptime %</label><input id="calcFlashUptime" type="number" value="50" /></div>
+        <div><label>Flash all-race extra damage %</label><input id="calcFlashRaceDmg" type="number" value="5" /></div>
+        <div><label>Manual Flash Final DMG estimate %</label><input id="calcFlashDmg" type="number" value="0" /></div>
+      </div>
+      <h3 style="margin-top:16px">Physical DPS Target Goals</h3>
+      <p class="hint">These are your stated target totals. The DPS-balanced recommendation gives more value to Divinities that close the biggest remaining gap first, so it will not blindly over-stack Crit DMG Bonus when Final Crit, Final ASPD, Size Counter, or Holy/Neutral Enhance are still lacking.</p>
+      <div class="calcGrid noPrint">
+        <div><label>Target Crit DMG Bonus %</label><input id="targetCritDmgGoal" type="number" value="1000" /></div>
+        <div><label>Target Final P.DMG Bonus %</label><input id="targetFinalPDmgGoal" type="number" value="350" /></div>
+        <div><label>Target Final Crit %</label><input id="targetFinalCritGoal" type="number" value="200" /></div>
+        <div><label>Target Final ASPD %</label><input id="targetFinalAspdGoal" type="number" value="700" /></div>
+        <div><label>Target Attribute Counter / Holy/Neutral Enhance %</label><input id="targetHolyNeutralGoal" type="number" value="320" /></div>
+        <div><label>Target Size Counter %</label><input id="targetSizeCounterGoal" type="number" value="250" /></div>
+      </div>
+      <div class="btns noPrint">
+        <button class="secondary small" id="loadBuildPresetBtn">Load Current Large Build Preset</button>
+        <button class="secondary small" id="saveCalcSettingsBtn">Save Damage Settings</button>
+        <button class="danger small" id="resetCalcSettingsBtn">Reset Damage Settings</button>
+        <span class="statusText" id="calcStatus">Damage settings are used for preview and saved inventory ranking.</span>
+      </div>
+      <div class="calcSummary" id="damageSummary"></div>
+    </section>
+
+    <section class="grid tabSection" data-tab="selector">
+      <div class="panel">
+        <h2>2) Add / Edit Divinity</h2>
+        <input id="editingIndex" type="hidden" value="" />
+        <div class="row">
+          <div>
+            <label>Divinity category</label>
+            <select id="category"></select>
+          </div>
+          <div>
+            <label>Quality</label>
+            <select id="quality">
+              <option value="Gold">Gold</option>
+              <option value="Purple">Purple</option>
+              <option value="Blue">Blue</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Level first [LVL 1 to LVL 7 (MAX)]</label>
+            <select id="level">
+              <option value="1">LVL 1</option>
+              <option value="2">LVL 2</option>
+              <option value="3">LVL 3</option>
+              <option value="4">LVL 4</option>
+              <option value="5">LVL 5</option>
+              <option value="6">LVL 6</option>
+              <option value="7">LVL 7 (MAX)</option>
+            </select>
+          </div>
+          <div>
+            <label>Available stat lines for this quality / level</label>
+            <input id="statLineLimit" type="text" readonly />
+          </div>
+        </div>
+        <label>Stat lines contained in this Divinity</label>
+        <div id="statLines" class="statLineGrid"></div>
+        <div class="hint" id="statLineHint">Select the Divinity level first, then choose stat lines in order.</div>
+        <div class="row">
+          <div>
+            <label>Flash</label>
+            <select id="flash">
+              <option value="false">No Flash</option>
+              <option value="true">Has Flash</option>
+            </select>
+          </div>
+          <div>
+            <label>Custom name / note</label>
+            <input id="note" type="text" placeholder="Example: Gold Bow with P.PEN" />
+          </div>
+        </div>
+
+        <h3 style="margin-top:18px">Affixes</h3>
+        <div class="row3">
+          <div>
+            <label>Affix 1</label>
+            <select id="affix1"></select>
+          </div>
+          <div>
+            <label>Affix 2</label>
+            <select id="affix2"></select>
+          </div>
+          <div>
+            <label>Affix 3</label>
+            <select id="affix3"></select>
+          </div>
+        </div>
+        <div class="row3">
+          <div>
+            <label>Level 1</label>
+            <select id="affixLevel1"></select>
+          </div>
+          <div>
+            <label>Level 2</label>
+            <select id="affixLevel2"></select>
+          </div>
+          <div>
+            <label>Level 3</label>
+            <select id="affixLevel3"></select>
+          </div>
+        </div>
+        <div id="affixDescriptions" class="cards" style="margin-top:12px"></div>
+        <div class="btns noPrint">
+          <button id="saveBtn">Save Divinity</button>
+          <button class="secondary" id="resetFormBtn">Reset Form</button>
+          <button class="secondary" onclick="window.print()">Print / PDF</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="toolbar">
+          <h2>3) Recommended Divinity</h2>
+          <input class="search" id="searchBox" type="text" placeholder="Search category, stat, affix..." />
+        </div>
+        <div id="topRecommendationSummary"></div>
+        <h3 style="margin-top:14px">Best Pick by Category</h3>
+        <div id="recommendations"></div>
+      </div>
+    </section>
+
+    <section class="panel tabSection hidden" data-tab="inventory">
+      <div class="toolbar">
+        <h2>Saved Divinity Inventory</h2>
+        <div class="btns noPrint" style="margin:0;align-items:center">
+          <select id="inventoryCategoryFilter" title="Filter saved inventory by Divinity category" style="width:auto;min-width:220px;padding:8px 10px;border-radius:10px;font-size:12px">
+            <option value="">All categories</option>
+          </select>
+          <button class="secondary small" id="exportBtn">Export JSON</button>
+          <button class="secondary small" id="importBtn">Import JSON</button>
+          <button class="danger small" id="clearBtn">Clear All</button>
+        </div>
+      </div>
+      <textarea id="importExport" class="hidden" rows="5" placeholder="Paste exported JSON here, then click Import JSON again."></textarea>
+      <div style="overflow:auto;margin-top:12px">
+        <table>
+          <thead><tr><th>Score</th><th>Category</th><th>Quality</th><th>Stat Lines</th><th>Flash</th><th>Affixes</th><th>Notes</th><th class="noPrint">Action</th></tr></thead>
+          <tbody id="inventoryBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="grid tabSection hidden" data-tab="statref">
+      <div class="panel">
+        <h2>Editable Stat Value Reference</h2>
+        <div class="notice"><b>Combined element stat fix active:</b> only five paired Enhance rows are selectable. Update the Blue, Purple, and Gold values here whenever ROX changes the Divinity stat percentages. Values are saved in this browser and are used everywhere in this tool, including stat-line dropdowns, recommendations, and the saved inventory table. You can also set your current table values as the shared default baseline for this browser, so newly created users start with the same stat reference values. Element attributes are now forced as five single selectable paired Enhance stats only: Earth/Fire Enhance, Holy/Neutral Enhance, Ghost/Poison Enhance, Shadow/Undead Enhance, and Wind/Water Enhance. Separate single-element stats are removed from dropdowns, checkboxes, scoring, saved inventory, imports, and editable stat values. Final Anti-Crit and Final Flee are included with default Blue/Purple/Gold values of 15/18/21. P.DMG Bonus and M.DMG Bonus are included with default Blue/Purple/Gold values of 3300/5513/6300. Stat lines are now selected from ordered dropdowns after choosing the Divinity level first. At LVL 7, Blue allows only 5 stat lines, Purple allows only 6 stat lines, and Gold allows 7 stat lines. Edit and Delete actions show confirmation dialogs before continuing. Saved Divinity Inventory can now be filtered by Divinity category. Recommendations can now be ranked using the ROX damage formula settings instead of simple stat weighting. The damage calculator also includes a separate Final P.DMG Bonus % input for physical damage builds. v28 prioritizes Final P.DMG Bonus and Size Counter first, while keeping Flash priority scoring using your Reaper's Scythe +7 Flash reference: same highest element +84% Final DMG Bonus, different element +28%, 10s duration every 20s, plus 5% extra monster-race damage. It keeps your current large-size centric build preset without Divinity stats from the screenshots: P.ATK 17,413, Final P.DMG Bonus 255.8%, Final ASPD 527.5%, Final Crit 42%, Crit DMG Bonus 815.2%, Holy/Neutral baseline 155.91% conservative, Large Size Counter 62%, and flat P.DMG Bonus 5,064. It keeps the target-balanced DPS goals: Size Counter 250, Final P.DMG Bonus 350, Holy/Neutral Enhance 320, Crit DMG Bonus 1000, Final Crit 200, and Final ASPD 700, while still valuing DEX for P.ATK scaling.</div>
+        <div class="btns noPrint">
+          <button class="secondary small" id="saveStatValuesBtn">Save Stat Values</button>
+          <button class="secondary small" id="setDefaultStatValuesBtn">Set Current Values as Shared Default</button>
+          <button class="danger small" id="resetStatValuesBtn">Reset Stat Values</button>
+          <span id="statValueStatus" class="statusText">Shared default values loaded.</span>
+        </div>
+        <div style="overflow:auto;margin-top:10px">
+          <table id="statRef"></table>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Affix Family Reference</h2>
+        <div id="affixRef" class="cards"></div>
+      </div>
+    </section>
+  </main>
+  <div class="footer">Data basis: GamingPH Divinity guide + community ROX damage formula structure. v28 prioritizes Final P.DMG Bonus and Size Counter first, while keeping Flash priority scoring from your Reaper's Scythe +7 reference, your large-size centric current-stat preset from the screenshots, plus target-balanced DPS recommendation and target-progress overview, while keeping Final P.DMG Bonus %, needed-stat recommendation, recommended Divinity summary, tabbed inventory, and local default stat values. Category names and stat values can be adjusted inside the tool if ROX changes naming later. Login data and Divinity data are kept per account in this browser.</div>
+
+<script>
+const categories = ["Spear of Eternity","Thunderous Hammer","Blade of Godslayer","Wolf Shackles","Stormrage Halberd","Chanter's Harp","Bow of Winter","Reaper Scythe"];
+const qualities = { Gold: 3, Purple: 2, Blue: 1 };
+const MAX_DIVINITY_LEVEL = 7;
+const STAT_LINE_CAP_BY_QUALITY = { Blue: 5, Purple: 6, Gold: 7 };
+const COMBINED_ELEMENT_STATS = [
+  "Earth/Fire Enhance",
+  "Holy/Neutral Enhance",
+  "Ghost/Poison Enhance",
+  "Shadow/Undead Enhance",
+  "Wind/Water Enhance"
+];
+const LEGACY_SINGLE_ELEMENT_STATS = [
+  "Earth Enhance","Fire Enhance","Holy Enhance","Neutral Enhance","Ghost Enhance",
+  "Poison Enhance","Shadow Enhance","Undead Enhance","Wind Enhance","Water Enhance"
+];
+const statGroups = [
+  { group:"Core flat / speed", stats:["STR","AGI","VIT","INT","DEX","LUK","Final ASPD","Final Haste"], values:{Blue:74,Purple:92,Gold:105} },
+  { group:"Final defense / sustain", stats:["Final P.DEF","Final M.DEF","HP Regen per 5s","SP Regen per 5s","Physical Lifesteal","Magic Lifesteal","P.DMG Reflect","M.DMG Reflect","Final P.DMG RED","Final M.DMG RED","Final P.DMG Bonus","Final M.DMG Bonus","Final P.PEN","Final M.PEN","Final Crit","Final Anti-Crit","Final Flee","Crit DMG Bonus"], values:{Blue:15,Purple:18,Gold:21} },
+  { group:"Combined element enhance", stats:COMBINED_ELEMENT_STATS, values:{Blue:18,Purple:23,Gold:26} },
+  { group:"Percent / size damage", stats:["Bonus DMG to Large","Bonus DMG to Medium","Bonus DMG to Small","STR%","AGI%","VIT%","INT%","DEX%","LUK%","Max HP%","Max SP%","P.ATK%","M.ATK%"], values:{Blue:18,Purple:23,Gold:26} },
+  { group:"Flat P/M damage bonus", stats:["P.DMG Bonus","M.DMG Bonus"], values:{Blue:3300,Purple:5513,Gold:6300} },
+  { group:"Final damage percent", stats:["P.DMG Bonus%","M.DMG Bonus%"], values:{Blue:29,Purple:37,Gold:42} }
+];
+const allStats = [...new Set(statGroups.flatMap(g=>g.stats))];
+const BUILT_IN_STAT_VALUE_TABLE = {
+  "STR": {Blue:74, Purple:92, Gold:105},
+  "AGI": {Blue:74, Purple:92, Gold:105},
+  "VIT": {Blue:74, Purple:92, Gold:105},
+  "INT": {Blue:74, Purple:92, Gold:105},
+  "DEX": {Blue:74, Purple:92, Gold:105},
+  "LUK": {Blue:74, Purple:92, Gold:105},
+  "Final ASPD": {Blue:74, Purple:92, Gold:105},
+  "Final Haste": {Blue:7, Purple:9, Gold:11},
+  "Final P.DEF": {Blue:15, Purple:18, Gold:21},
+  "Final M.DEF": {Blue:15, Purple:18, Gold:21},
+  "HP Regen per 5s": {Blue:7, Purple:9, Gold:11},
+  "SP Regen per 5s": {Blue:7, Purple:9, Gold:11},
+  "Physical Lifesteal": {Blue:15, Purple:18, Gold:21},
+  "Magic Lifesteal": {Blue:15, Purple:18, Gold:21},
+  "P.DMG Reflect": {Blue:15, Purple:18, Gold:21},
+  "M.DMG Reflect": {Blue:15, Purple:18, Gold:21},
+  "Final P.DMG RED": {Blue:15, Purple:18, Gold:21},
+  "Final M.DMG RED": {Blue:15, Purple:18, Gold:21},
+  "Final P.DMG Bonus": {Blue:15, Purple:18, Gold:21},
+  "Final M.DMG Bonus": {Blue:15, Purple:18, Gold:21},
+  "Final P.PEN": {Blue:15, Purple:18, Gold:21},
+  "Final M.PEN": {Blue:15, Purple:18, Gold:21},
+  "Final Crit": {Blue:15, Purple:18, Gold:21},
+  "Final Anti-Crit": {Blue:15, Purple:18, Gold:21},
+  "Final Flee": {Blue:15, Purple:18, Gold:21},
+  "Crit DMG Bonus": {Blue:29, Purple:37, Gold:42},
+  "Earth/Fire Enhance": {Blue:18, Purple:23, Gold:26},
+  "Holy/Neutral Enhance": {Blue:18, Purple:23, Gold:26},
+  "Ghost/Poison Enhance": {Blue:18, Purple:23, Gold:26},
+  "Shadow/Undead Enhance": {Blue:18, Purple:23, Gold:26},
+  "Wind/Water Enhance": {Blue:18, Purple:23, Gold:26},
+  "Bonus DMG to Large": {Blue:18, Purple:23, Gold:26},
+  "Bonus DMG to Medium": {Blue:18, Purple:23, Gold:26},
+  "Bonus DMG to Small": {Blue:18, Purple:23, Gold:26},
+  "STR%": {Blue:6, Purple:7, Gold:8},
+  "AGI%": {Blue:6, Purple:7, Gold:8},
+  "VIT%": {Blue:6, Purple:7, Gold:8},
+  "INT%": {Blue:6, Purple:7, Gold:8},
+  "DEX%": {Blue:6, Purple:7, Gold:8},
+  "LUK%": {Blue:6, Purple:7, Gold:8},
+  "Max HP%": {Blue:15, Purple:18, Gold:21},
+  "Max SP%": {Blue:29, Purple:37, Gold:42},
+  "P.ATK%": {Blue:15, Purple:18, Gold:21},
+  "M.ATK%": {Blue:15, Purple:18, Gold:21},
+  "P.DMG Bonus": {Blue:3300, Purple:5513, Gold:6300},
+  "M.DMG Bonus": {Blue:3300, Purple:5513, Gold:6300},
+  "P.DMG Bonus%": {Blue:29, Purple:37, Gold:42},
+  "M.DMG Bonus%": {Blue:29, Purple:37, Gold:42}
+};
+const BUILT_IN_STAT_DEFAULT_VERSION = 28;
+const GLOBAL_STAT_DEFAULTS_VERSION_KEY = 'roxDivinitySharedStatDefaultsVersion';
+const USER_STAT_DEFAULTS_VERSION_SUFFIX = '::version';
+const elementStatMap = {
+  "Earth/Fire Enhance":"Earth/Fire Enhance",
+  "Holy/Neutral Enhance":"Holy/Neutral Enhance",
+  "Ghost/Poison Enhance":"Ghost/Poison Enhance",
+  "Shadow/Undead Enhance":"Shadow/Undead Enhance",
+  "Wind/Water Enhance":"Wind/Water Enhance",
+  "Earth / Fire Enhance":"Earth/Fire Enhance",
+  "Holy / Neutral Enhance":"Holy/Neutral Enhance",
+  "Ghost / Poison Enhance":"Ghost/Poison Enhance",
+  "Shadow / Undead Enhance":"Shadow/Undead Enhance",
+  "Wind / Water Enhance":"Wind/Water Enhance",
+  "Earth/Fire":"Earth/Fire Enhance",
+  "Holy/Neutral":"Holy/Neutral Enhance",
+  "Ghost/Poison":"Ghost/Poison Enhance",
+  "Shadow/Undead":"Shadow/Undead Enhance",
+  "Wind/Water":"Wind/Water Enhance",
+  "Earth / Fire":"Earth/Fire Enhance",
+  "Holy / Neutral":"Holy/Neutral Enhance",
+  "Ghost / Poison":"Ghost/Poison Enhance",
+  "Shadow / Undead":"Shadow/Undead Enhance",
+  "Wind / Water":"Wind/Water Enhance",
+  "Earth Enhance":"Earth/Fire Enhance",
+  "Fire Enhance":"Earth/Fire Enhance",
+  "Holy Enhance":"Holy/Neutral Enhance",
+  "Neutral Enhance":"Holy/Neutral Enhance",
+  "Ghost Enhance":"Ghost/Poison Enhance",
+  "Poison Enhance":"Ghost/Poison Enhance",
+  "Shadow Enhance":"Shadow/Undead Enhance",
+  "Undead Enhance":"Shadow/Undead Enhance",
+  "Wind Enhance":"Wind/Water Enhance",
+  "Water Enhance":"Wind/Water Enhance"
+};
+function normalizeStatName(stat){
+  const text = String(stat ?? '').trim();
+  return elementStatMap[text] || text;
+}
+function normalizeStatList(stats){ return [...new Set((stats || []).map(normalizeStatName).filter(s => allStats.includes(s)))]; }
+const defaultStatValues = {};
+statGroups.forEach(group => group.stats.forEach(stat => {
+  defaultStatValues[stat] = {
+    group: group.group,
+    values: { Blue: String(group.values.Blue), Purple: String(group.values.Purple), Gold: String(group.values.Gold) }
+  };
+}));
+Object.entries(BUILT_IN_STAT_VALUE_TABLE).forEach(([stat, values]) => {
+  if(defaultStatValues[stat]){
+    defaultStatValues[stat].values = {Blue:String(values.Blue), Purple:String(values.Purple), Gold:String(values.Gold)};
+  }
+});
+let statOverrides = {};
+const DPS_TARGET_INPUT_IDS = ["targetCritDmgGoal","targetFinalPDmgGoal","targetFinalCritGoal","targetFinalAspdGoal","targetHolyNeutralGoal","targetSizeCounterGoal"];
+const CURRENT_LARGE_BUILD_PRESET = {
+  calcDamageType:'physical',
+  calcPAtk:'17413',
+  calcMAtk:'208',
+  calcMinFactor:'5',
+  calcPPen:'3',
+  calcTargetPDef:'0',
+  calcPDmgPercent:'0',
+  calcFinalPDmgPercent:'255.8',
+  calcASPD:'527.5',
+  calcCurrentDex:'0',
+  calcPAtkPerDex:'0',
+  calcPFlatBonus:'5064',
+  calcMPen:'3',
+  calcTargetMDef:'0',
+  calcMDmgPercent:'0',
+  calcMFlatBonus:'0',
+  calcElement:'155.91',
+  calcElementTarget:'Holy/Neutral Enhance',
+  calcSkill:'0',
+  calcRace:'62',
+  calcSizeTarget:'Large',
+  calcSize:'100',
+  calcUseCrit:'true',
+  calcCrit:'42',
+  calcAntiCrit:'0',
+  calcCritDmg:'815.2',
+  calcBaseCritDmg:'200',
+  calcFlashPriority:'true',
+  calcFlashElementMode:'same',
+  calcFlashSameDmg:'84',
+  calcFlashDifferentDmg:'28',
+  calcFlashUptime:'50',
+  calcFlashRaceDmg:'5',
+  calcFlashDmg:'0',
+  targetCritDmgGoal:'1000',
+  targetFinalPDmgGoal:'350',
+  targetFinalCritGoal:'200',
+  targetFinalAspdGoal:'700',
+  targetHolyNeutralGoal:'320',
+  targetSizeCounterGoal:'250'
+};
+const DEFAULT_SIZE_ATTRIBUTE_PRIORITY_STATS = ["Final P.DMG Bonus","Bonus DMG to Large","Holy/Neutral Enhance","Crit DMG Bonus","Final Crit","Final ASPD","DEX"];
+const CALC_INPUT_IDS = ["calcDamageType","calcPAtk","calcMAtk","calcMinFactor","calcPPen","calcTargetPDef","calcPDmgPercent","calcFinalPDmgPercent","calcASPD","calcCurrentDex","calcPAtkPerDex","calcPFlatBonus","calcMPen","calcTargetMDef","calcMDmgPercent","calcMFlatBonus","calcElement","calcElementTarget","calcSkill","calcRace","calcSizeTarget","calcSize","calcUseCrit","calcCrit","calcAntiCrit","calcCritDmg","calcBaseCritDmg","calcFlashPriority","calcFlashElementMode","calcFlashSameDmg","calcFlashDifferentDmg","calcFlashUptime","calcFlashRaceDmg","calcFlashDmg",...DPS_TARGET_INPUT_IDS].filter(Boolean);
+const affixFamilies = ["Judgment","Curse Breaker","Prophet","Revelation","Annihilation","Ark"];
+const roman = ["I","II","III","IV","V","VI"];
+const affixDescriptions = {
+  Judgment: {
+    I:"Reduces damage taken from monsters with Fervor.",
+    II:"Reduces the reflection chance of Spikes.",
+    III:"Reduces damage taken from monsters with Invisibility.",
+    IV:"Reduces Reflective Shield damage multiplier.",
+    V:"Normal attacks deal an extra hit on Healing Shield.",
+    VI:"Reduces Protective Mist damage reduction effect."
+  },
+  "Curse Breaker": {
+    I:"Reduces healing ban and Virus damage multiplier.",
+    II:"Reduces blind chance of Restricted Vision.",
+    III:"Reduces SP drain effect of Arcane Leech.",
+    IV:"Reduces Burn damage multiplier per stack.",
+    V:"Reduces Chill stack effect and changes max stacks.",
+    VI:"Reduces chance of Corrosion."
+  },
+  Prophet: {
+    I:"Reduces duration of Electrify.",
+    II:"Reduces pulling distance from Vortex.",
+    III:"Reduces Death Link damage multiplier.",
+    IV:"Reduces duration of Disrupt.",
+    V:"Reduces duration of Irresistible.",
+    VI:"Reduces damage taken from Thunder Wrath."
+  },
+  Revelation: {
+    I:"Chance not to generate Venom Pit when targeted.",
+    II:"Reduces Aqua Sphere damage multiplier.",
+    III:"Reduces Polar Charge damage multiplier.",
+    IV:"Increases MSPD when Scythe of Hell activates.",
+    V:"Increases MSPD when Spirit Bomb activates.",
+    VI:"Reduces duration of Viral Spores."
+  },
+  Annihilation: {
+    I:"Increases MSPD when Blazing Golden Thief Bug activates.",
+    II:"Increases damage against monsters within Mitigation Tablet.",
+    III:"Reduces Evil Heart damage multiplier.",
+    IV:"Reduces Fire Tablet damage multiplier.",
+    V:"No longer takes damage when blocking Life Link.",
+    VI:"Reduces Blinding Tablet blind duration and Hit Rate reduction."
+  },
+  Ark: {
+    I:"Reduces damage taken from Thunderstorm.",
+    II:"Reduces damage taken from Cyclone.",
+    III:"Reduces damage taken from Radiant Cross.",
+    IV:"Reduces immobilization duration of Time Shackles.",
+    V:"Reduces knockback effect of Meteor.",
+    VI:"Reduces damage taken from Timed Mine."
+  }
+};
+const setEffects = {
+  Judgment:{ three:"Passive affix damage taken reduction bonus.", six:"Final DMG bonus when attacking monsters with Passive affixes." },
+  "Curse Breaker":{ three:"Chance to remove Curse debuffs when inflicted.", six:"Higher removal chance, lower cooldown, and Curse immunity after removal." },
+  Prophet:{ three:"Burial effect before Punishment damage.", six:"Shorter Burial cooldown, control immunity, and HP recovery after effect." },
+  Revelation:{ three:"Shield when Mechanism affix activates.", six:"Stronger shield and extra hit blocks after shield disappears." },
+  Annihilation:{ three:"Extra hit vs Summon-created monsters and stacking Final DMG after summoned monsters die.", six:"More extra hits and higher stacking damage boost." },
+  Ark:{ three:"MSPD bonus when Area effect triggers.", six:"Longer/stronger Area-triggered MSPD benefit until damage/exiting combat." }
+};
+const buildProfiles = {
+  "Physical DPS":["Final P.DMG Bonus","Bonus DMG to Large","Bonus DMG to Medium","Bonus DMG to Small","Holy/Neutral Enhance","Crit DMG Bonus","DEX","Final Crit","Final ASPD","P.ATK%","P.DMG Bonus%","P.DMG Bonus","Final P.PEN","STR"],
+  "Magic DPS":["INT","DEX","M.ATK%","M.DMG Bonus%","M.DMG Bonus","Final M.DMG Bonus","Final M.PEN","Final Haste","Max SP%","Earth/Fire Enhance","Holy/Neutral Enhance","Ghost/Poison Enhance","Shadow/Undead Enhance","Wind/Water Enhance"],
+  "Crit / ASPD Physical":["Final P.DMG Bonus","Bonus DMG to Large","Bonus DMG to Medium","Bonus DMG to Small","Holy/Neutral Enhance","Crit DMG Bonus","DEX","Final Crit","Final ASPD","AGI","LUK","P.ATK%","P.DMG Bonus%","Final P.PEN","STR%","AGI%","LUK%"],
+  "Tank / Sustain":["VIT","VIT%","Max HP%","Final P.DEF","Final M.DEF","Final P.DMG RED","Final M.DMG RED","Final Anti-Crit","Final Flee","HP Regen per 5s","P.DMG Reflect","M.DMG Reflect","Physical Lifesteal","Magic Lifesteal"],
+  "Support / Utility":["DEX","INT","VIT","Final Haste","Max SP%","SP Regen per 5s","Final P.DEF","Final M.DEF","Final P.DMG RED","Final M.DMG RED","Final Anti-Crit","Final Flee"],
+  "Oblivion Realm / Anti-affix":["Final P.DMG RED","Final M.DMG RED","Final Anti-Crit","Final Flee","Max HP%","Final Haste","P.ATK%","M.ATK%","P.DMG Bonus%","M.DMG Bonus%","P.DMG Bonus","M.DMG Bonus","Final P.PEN","Final M.PEN"]
+};
+let inventory = [];
+let statLineValues = [];
+const $ = id => document.getElementById(id);
+
+const AUTH_USERS_KEY = 'roxDivinityAuthUsers';
+const AUTH_ACTIVE_KEY = 'roxDivinityActiveUser';
+const GLOBAL_STAT_DEFAULTS_KEY = 'roxDivinitySharedStatDefaults';
+const APP_DATA_KEYS = {
+  statDefaults:'roxDivinityUserStatDefaults',
+  statOverrides:'roxDivinityStatOverrides',
+  calcSettings:'roxDivinityCalcSettings',
+  inventory:'roxDivinityInventory',
+  activeTab:'roxDivinityActiveTab'
+};
+let appStarted = false;
+function getGlobalDefaultStatValues(){
+  try{return JSON.parse(localStorage.getItem(GLOBAL_STAT_DEFAULTS_KEY) || '{}') || {};}
+  catch(e){return {};}
+}
+function saveGlobalDefaultStatValues(snapshot){
+  localStorage.setItem(GLOBAL_STAT_DEFAULTS_KEY, JSON.stringify(snapshot || {}));
+}
+function builtInStatDefaultSnapshot(){
+  const snap = {};
+  allStats.forEach(stat=>{
+    const values = BUILT_IN_STAT_VALUE_TABLE[stat] || defaultStatValues[stat]?.values || {};
+    snap[stat] = {Blue:String(values.Blue ?? ''), Purple:String(values.Purple ?? ''), Gold:String(values.Gold ?? '')};
+  });
+  return snap;
+}
+function ensureSharedBuiltInStatDefaults(){
+  const currentVersion = Number(localStorage.getItem(GLOBAL_STAT_DEFAULTS_VERSION_KEY) || 0);
+  if(currentVersion < BUILT_IN_STAT_DEFAULT_VERSION){
+    saveGlobalDefaultStatValues(builtInStatDefaultSnapshot());
+    localStorage.setItem(GLOBAL_STAT_DEFAULTS_VERSION_KEY, String(BUILT_IN_STAT_DEFAULT_VERSION));
+  }
+}
+function userStatDefaultsVersionKey(username=activeUsername()){
+  return scopedDataKey(APP_DATA_KEYS.statDefaults, username) + USER_STAT_DEFAULTS_VERSION_SUFFIX;
+}
+function ensureUserBuiltInStatDefaults(username=activeUsername()){
+  if(!username) return;
+  const currentVersion = Number(localStorage.getItem(userStatDefaultsVersionKey(username)) || 0);
+  if(currentVersion < BUILT_IN_STAT_DEFAULT_VERSION){
+    localStorage.setItem(scopedDataKey(APP_DATA_KEYS.statDefaults, username), JSON.stringify(builtInStatDefaultSnapshot()));
+    localStorage.setItem(userStatDefaultsVersionKey(username), String(BUILT_IN_STAT_DEFAULT_VERSION));
+  }
+}
+function seedUserStatDefaultsFromGlobal(username){
+  ensureSharedBuiltInStatDefaults();
+  const globalDefaults = getGlobalDefaultStatValues();
+  if(Object.keys(globalDefaults).length){
+    localStorage.setItem(scopedDataKey(APP_DATA_KEYS.statDefaults, username), JSON.stringify(globalDefaults));
+    localStorage.setItem(userStatDefaultsVersionKey(username), String(BUILT_IN_STAT_DEFAULT_VERSION));
+  }
+}
+function scopedDataKey(baseKey, username=activeUsername()){
+  const safeUser = String(username || '').trim();
+  return safeUser ? `${baseKey}::${encodeURIComponent(safeUser)}` : baseKey;
+}
+function getAppItem(baseKey){ return localStorage.getItem(scopedDataKey(baseKey)); }
+function setAppItem(baseKey, value){ localStorage.setItem(scopedDataKey(baseKey), value); }
+function removeAppItem(baseKey){ localStorage.removeItem(scopedDataKey(baseKey)); }
+function hasScopedUserData(username){
+  return Object.values(APP_DATA_KEYS).some(key => localStorage.getItem(scopedDataKey(key, username)) !== null);
+}
+function initializeEmptyUserData(username){
+  Object.values(APP_DATA_KEYS).forEach(key => localStorage.removeItem(scopedDataKey(key, username)));
+  localStorage.setItem(scopedDataKey(APP_DATA_KEYS.inventory, username), '[]');
+  seedUserStatDefaultsFromGlobal(username);
+  localStorage.setItem(scopedDataKey(APP_DATA_KEYS.activeTab, username), 'selector');
+}
+function migrateLegacyDataForExistingUser(username){
+  const users = getAuthUsers();
+  const user = users[username];
+  if(!user || user.dataInitialized) return;
+  if(!hasScopedUserData(username)){
+    Object.values(APP_DATA_KEYS).forEach(key => {
+      const legacy = localStorage.getItem(key);
+      if(legacy !== null) localStorage.setItem(scopedDataKey(key, username), legacy);
+    });
+  }
+  users[username] = {...user, dataInitialized:true, dataVersion:28, migratedLegacyDataAt:new Date().toISOString()};
+  saveAuthUsers(users);
+}
+function getAuthUsers(){
+  try{return JSON.parse(localStorage.getItem(AUTH_USERS_KEY) || '{}') || {};}
+  catch(e){return {};}
+}
+function saveAuthUsers(users){ localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(users || {})); }
+function activeUsername(){ return localStorage.getItem(AUTH_ACTIVE_KEY) || ''; }
+function activeUser(){ const u = activeUsername(); return getAuthUsers()[u] || null; }
+function setAuthMessage(text, type=''){
+  const el = $('authMessage');
+  if(!el) return;
+  el.textContent = text || '';
+  el.className = 'authMessage' + (type ? ' ' + type : '');
+}
+function showAuthPanel(panel){
+  const login = panel !== 'signup';
+  $('loginPanel')?.classList.toggle('hidden', !login);
+  $('signupPanel')?.classList.toggle('hidden', login);
+  $('showLoginBtn')?.classList.toggle('secondary', !login);
+  $('showSignupBtn')?.classList.toggle('secondary', login);
+  setAuthMessage('');
+}
+function refreshUserBar(){
+  const user = activeUser();
+  const bar = $('userBar');
+  const text = $('userBarText');
+  if(!bar || !text) return;
+  if(!user){ bar.classList.add('hidden'); return; }
+  const ign = user.ign ? ` · IGN: ${user.ign}` : '';
+  const cls = user.characterClass ? ` · Class: ${user.characterClass}` : '';
+  text.innerHTML = `Logged in as <b>${escapeHtml(user.name || user.username)}</b>${escapeHtml(ign + cls)}`;
+  bar.classList.remove('hidden');
+}
+function launchAppOnce(){
+  document.body.classList.remove('authLocked');
+  refreshUserBar();
+  if(!appStarted){
+    init();
+    loadActiveTab();
+    appStarted = true;
+  }
+}
+function handleLogin(){
+  const username = ($('loginUsername')?.value || '').trim();
+  const password = $('loginPassword')?.value || '';
+  const users = getAuthUsers();
+  if(!username || !password){ setAuthMessage('Enter both username and password.', 'error'); return; }
+  const user = users[username];
+  if(!user || user.password !== password){ setAuthMessage('Invalid username or password.', 'error'); return; }
+  localStorage.setItem(AUTH_ACTIVE_KEY, username);
+  migrateLegacyDataForExistingUser(username);
+  setAuthMessage('Login successful. Opening system...', 'success');
+  launchAppOnce();
+}
+function handleSignup(){
+  const name = ($('signupName')?.value || '').trim();
+  const ign = ($('signupIgn')?.value || '').trim();
+  const characterClass = ($('signupClass')?.value || '').trim();
+  const username = ($('signupUsername')?.value || '').trim();
+  const password = $('signupPassword')?.value || '';
+  if(!name || !ign || !characterClass || !username || !password){
+    setAuthMessage('Complete Name, IGN, Class, Username, and Password to sign up.', 'error');
+    return;
+  }
+  if(username.length < 3){ setAuthMessage('Username must be at least 3 characters.', 'error'); return; }
+  if(password.length < 4){ setAuthMessage('Password must be at least 4 characters.', 'error'); return; }
+  const users = getAuthUsers();
+  if(users[username]){ setAuthMessage('Username already exists. Choose another username or login.', 'error'); return; }
+  users[username] = {username, password, name, ign, characterClass, createdAt:new Date().toISOString(), dataInitialized:true, dataVersion:28};
+  saveAuthUsers(users);
+  initializeEmptyUserData(username);
+  localStorage.setItem(AUTH_ACTIVE_KEY, username);
+  setAuthMessage('Account created with a fresh blank workspace. Opening system...', 'success');
+  launchAppOnce();
+}
+function logoutUser(){
+  if(!confirm('Logout and return to the login screen?')) return;
+  localStorage.removeItem(AUTH_ACTIVE_KEY);
+  location.reload();
+}
+function initAuth(){
+  $('showLoginBtn')?.addEventListener('click',()=>showAuthPanel('login'));
+  $('showSignupBtn')?.addEventListener('click',()=>showAuthPanel('signup'));
+  $('loginBtn')?.addEventListener('click', handleLogin);
+  $('signupBtn')?.addEventListener('click', handleSignup);
+  $('logoutBtn')?.addEventListener('click', logoutUser);
+  ['loginUsername','loginPassword'].forEach(id=>$(id)?.addEventListener('keydown', e=>{ if(e.key==='Enter') handleLogin(); }));
+  ['signupName','signupIgn','signupClass','signupUsername','signupPassword'].forEach(id=>$(id)?.addEventListener('keydown', e=>{ if(e.key==='Enter') handleSignup(); }));
+  showAuthPanel('login');
+  const user = activeUser();
+  if(user) launchAppOnce();
+}
+function clampLevel(value){
+  const n = Number(value);
+  if(!Number.isFinite(n)) return 1;
+  return Math.min(MAX_DIVINITY_LEVEL, Math.max(1, Math.round(n)));
+}
+function clampLevelInput(){
+  const level = clampLevel($('level').value);
+  $('level').value = level;
+  return level;
+}
+function maxStatLinesForQuality(quality){
+  return STAT_LINE_CAP_BY_QUALITY[quality] || MAX_DIVINITY_LEVEL;
+}
+function allowedStatLineCount(quality=$('quality')?.value || 'Gold', level=$('level')?.value || 1){
+  return Math.min(maxStatLinesForQuality(quality), clampLevel(level));
+}
+function itemStatLines(item){
+  const legacyLines = [];
+  if(item?.mainStat) legacyLines.push(item.mainStat);
+  if(Array.isArray(item?.secondaries)) legacyLines.push(...item.secondaries);
+  const source = Array.isArray(item?.statLines) && item.statLines.length ? item.statLines : legacyLines;
+  return normalizeStatList(source);
+}
+function normalizeInventory(){
+  inventory = (inventory || []).map(item => {
+    const quality = qualities[item?.quality] ? item.quality : 'Gold';
+    const level = clampLevel(item?.level);
+    const lines = itemStatLines(item).slice(0, allowedStatLineCount(quality, level));
+    return {
+      ...item,
+      quality,
+      level,
+      statLines: lines,
+      mainStat: lines[0] || '',
+      secondaries: lines.slice(1)
+    };
+  });
+}
+function optionize(el, arr, includeNone=false){
+  el.innerHTML = (includeNone?'<option value="">None</option>':'') + arr.map(x=>`<option value="${escapeAttr(x)}">${x}</option>`).join('');
+}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
+function escapeAttr(s){return escapeHtml(s).replace(/`/g,'&#096;');}
+function defaultStatValue(stat, quality){
+  return defaultStatValues[stat]?.values?.[quality] ?? "";
+}
+function snapshotCurrentDefaultStatValues(){
+  const snap = {};
+  allStats.forEach(stat=>{
+    snap[stat] = {Blue:String(defaultStatValue(stat,'Blue')), Purple:String(defaultStatValue(stat,'Purple')), Gold:String(defaultStatValue(stat,'Gold'))};
+  });
+  return snap;
+}
+function applyDefaultStatValues(data){
+  Object.entries(data || {}).forEach(([stat, values])=>{
+    const mapped = normalizeStatName(stat);
+    if(!defaultStatValues[mapped]) return;
+    ['Blue','Purple','Gold'].forEach(q=>{
+      const value = values?.[q];
+      const text = String(value ?? '').trim();
+      if(text) defaultStatValues[mapped].values[q] = text;
+    });
+  });
+}
+function loadUserDefaultStatValues(){
+  ensureSharedBuiltInStatDefaults();
+  ensureUserBuiltInStatDefaults();
+  try{
+    const globalDefaults = getGlobalDefaultStatValues();
+    applyDefaultStatValues(globalDefaults);
+  }catch(e){}
+  try{
+    const data = JSON.parse(getAppItem(APP_DATA_KEYS.statDefaults) || '{}');
+    applyDefaultStatValues(data);
+  }catch(e){}
+}
+function currentStatTableValues(){
+  const snap = {};
+  allStats.forEach(stat=>{
+    snap[stat] = {Blue:String(statValue(stat,'Blue')), Purple:String(statValue(stat,'Purple')), Gold:String(statValue(stat,'Gold'))};
+  });
+  document.querySelectorAll('.statValueInput').forEach(input=>{
+    const stat = input.dataset.stat;
+    const q = input.dataset.quality;
+    if(stat && q){
+      if(!snap[stat]) snap[stat] = {};
+      snap[stat][q] = String(input.value || '').trim();
+    }
+  });
+  return snap;
+}
+function setCurrentStatValuesAsDefault(){
+  const snap = currentStatTableValues();
+  applyDefaultStatValues(snap);
+  const sharedDefaults = snapshotCurrentDefaultStatValues();
+  saveGlobalDefaultStatValues(sharedDefaults);
+  localStorage.setItem(GLOBAL_STAT_DEFAULTS_VERSION_KEY, String(BUILT_IN_STAT_DEFAULT_VERSION));
+  setAppItem(APP_DATA_KEYS.statDefaults, JSON.stringify(sharedDefaults));
+  localStorage.setItem(userStatDefaultsVersionKey(), String(BUILT_IN_STAT_DEFAULT_VERSION));
+  statOverrides = {};
+  persistStatOverrides();
+  renderStatLineSelectors(getRawStatLineValues());
+  renderAll();
+  setStatus('Current table values are now the shared defaults for this browser and future new users.');
+  alert('Current stat values are now the shared default baseline. Newly created users will start with these values.');
+}
+function statValue(stat, quality){
+  const custom = statOverrides?.[stat]?.[quality];
+  return custom !== undefined && custom !== null && String(custom).trim() !== "" ? String(custom) : defaultStatValue(stat, quality);
+}
+function statGroup(stat){
+  return defaultStatValues[stat]?.group || "Custom / updated";
+}
+function cleanStatOverrides(){
+  const cleaned = {};
+  Object.keys(statOverrides || {}).forEach(stat => {
+    const row = {};
+    ["Blue","Purple","Gold"].forEach(q => {
+      const val = statOverrides[stat]?.[q];
+      const text = String(val ?? '').trim();
+      if(text && text !== defaultStatValue(stat, q)) row[q] = text;
+    });
+    if(Object.keys(row).length) cleaned[stat] = row;
+  });
+  statOverrides = cleaned;
+}
+function persistStatOverrides(){
+  cleanStatOverrides();
+  setAppItem(APP_DATA_KEYS.statOverrides, JSON.stringify(statOverrides));
+}
+function loadStatOverrides(){
+  try{ statOverrides = JSON.parse(getAppItem(APP_DATA_KEYS.statOverrides) || '{}') || {}; }catch(e){ statOverrides = {}; }
+  migrateStatOverrides();
+}
+function migrateStatOverrides(){
+  const next = {};
+  Object.keys(statOverrides || {}).forEach(stat => {
+    const mappedStat = normalizeStatName(stat);
+    if(!allStats.includes(mappedStat)) return;
+    ["Blue","Purple","Gold"].forEach(q => {
+      const value = statOverrides?.[stat]?.[q];
+      const text = String(value ?? '').trim();
+      if(text){
+        if(!next[mappedStat]) next[mappedStat] = {};
+        const current = next[mappedStat][q];
+        if(current === undefined){
+          next[mappedStat][q] = text;
+        }else if(String(current) !== text && !String(current).split(' / ').includes(text)){
+          next[mappedStat][q] = `${current} / ${text}`;
+        }
+      }
+    });
+  });
+  statOverrides = next;
+  cleanStatOverrides();
+}
+function setStatus(message){
+  const el = $('statValueStatus');
+  if(el) el.textContent = message;
+}
+function checkedStatsInDomOrder(containerId){
+  return normalizeStatList([...$(containerId).querySelectorAll('input[type="checkbox"]:checked')].map(x=>x.value));
+}
+function getSelectedStats(containerId){
+  return checkedStatsInDomOrder(containerId);
+}
+function getRawStatLineValues(){
+  const container = $('statLines');
+  if(!container) return [];
+  return [...container.querySelectorAll('select.statLineSelect')].map(sel => normalizeStatName(sel.value || ''));
+}
+function getFormStatLines(){
+  return normalizeStatList(getRawStatLineValues()).slice(0, allowedStatLineCount());
+}
+function renderStatLineSelectors(selected=[]){
+  const container = $('statLines');
+  if(!container) return;
+  const count = allowedStatLineCount();
+  const picked = (selected && selected.length ? selected : getRawStatLineValues()).map(normalizeStatName);
+  const blankOption = '<option value="">Select stat...</option>';
+  container.innerHTML = Array.from({length: count}, (_, idx) => {
+    const value = allStats.includes(picked[idx]) ? picked[idx] : '';
+    const options = blankOption + allStats.map(stat => `<option value="${escapeAttr(stat)}" ${stat===value?'selected':''}>${escapeHtml(stat)}${statValue(stat, $('quality').value) ? ' — ' + escapeHtml(statValue(stat, $('quality').value)) : ''}</option>`).join('');
+    return `<div class="statLineCard"><label>Stat line ${idx + 1}</label><select class="statLineSelect" data-line="${idx}">${options}</select></div>`;
+  }).join('');
+  statLineValues = getRawStatLineValues();
+}
+function updateStatLineInfo(){
+  const quality = $('quality').value;
+  const level = clampLevel($('level').value);
+  const count = allowedStatLineCount(quality, level);
+  const qualityMax = maxStatLinesForQuality(quality);
+  const limitEl = $('statLineLimit');
+  if(limitEl) limitEl.value = `${count} stat line${count===1?'':'s'} available (${quality} max: ${qualityMax})`;
+  const hint = $('statLineHint');
+  if(hint){
+    const selected = getFormStatLines();
+    hint.innerHTML = selected.length
+      ? `Selected stat-line order: ${selected.map(escapeHtml).join(' → ')}<br>${escapeHtml(quality)} LVL ${level}: showing ${count} dropdown${count===1?'':'s'}. LVL 7 max is Blue 5, Purple 6, Gold 7.`
+      : `${escapeHtml(quality)} LVL ${level}: showing ${count} dropdown${count===1?'':'s'}. LVL 7 max is Blue 5, Purple 6, Gold 7.`;
+  }
+}
+function renderChecks(containerId, stats, selected=[]){
+  const selectedSet = normalizeStatList(selected);
+  $(containerId).innerHTML = stats.map(s=>`<label class="check"><input type="checkbox" value="${escapeAttr(s)}" ${selectedSet.includes(s)?'checked':''}> <span>${s}</span></label>`).join('');
+}
+function renderNeededStatSelectors(selected=[]){
+  const box = $('neededStatPickers');
+  if(!box) return;
+  const picked = normalizeStatList(selected).slice(0,7);
+  const blank = '<option value="">Select stat...</option>';
+  box.innerHTML = Array.from({length:7}, (_,idx)=>{
+    const current = allStats.includes(picked[idx]) ? picked[idx] : '';
+    const options = blank + allStats.map(stat=>`<option value="${escapeAttr(stat)}" ${stat===current?'selected':''}>${escapeHtml(stat)}</option>`).join('');
+    return `<div><label>Needed stat ${idx+1}</label><select class="neededStatSelect" data-needed-index="${idx}">${options}</select></div>`;
+  }).join('');
+  updateNeededStatHint();
+}
+function getNeededStats(){
+  const box = $('neededStatPickers');
+  if(!box) return [];
+  return normalizeStatList([...box.querySelectorAll('select.neededStatSelect')].map(sel=>sel.value));
+}
+function setNeededStats(stats=[]){
+  renderNeededStatSelectors(stats);
+}
+function getRecommendationStats(){
+  const needed = getNeededStats();
+  return needed.length ? needed : getSelectedStats('priorityStats');
+}
+function updateNeededStatHint(){
+  const el = $('neededStatHint');
+  if(!el) return;
+  const needed = getNeededStats();
+  el.innerHTML = needed.length
+    ? `Needed-stat order: ${needed.map(escapeHtml).join(' → ')}. Matches earlier in this order receive higher recommendation weight.`
+    : 'Select your most needed stats first. If blank, the recommendation falls back to checked build-profile priorities.';
+}
+function neededMatchDetails(item){
+  const needed = getRecommendationStats();
+  const lines = itemStatLines(item).slice(0, allowedStatLineCount(item.quality, item.level));
+  const matches = needed.filter(stat => lines.includes(stat));
+  const missing = needed.filter(stat => !lines.includes(stat));
+  return {needed, lines, matches, missing};
+}
+function neededMatchScore(item){
+  const {needed, lines} = neededMatchDetails(item);
+  if(!needed.length) return 0;
+  let score = 0;
+  needed.forEach((stat, needIdx)=>{
+    const lineIdx = lines.indexOf(stat);
+    if(lineIdx >= 0){
+      score += Math.max(12, 70 - needIdx*8 - lineIdx*3);
+    }
+  });
+  return score;
+}
+function recommendationHighlightStats(){
+  if(($('recommendStyle')?.value || '') === 'dpsPhysical'){
+    return [...new Set([
+      ...dpsTargetSizeStats(),
+      dpsTargetElementStat(),
+      'Final P.DMG Bonus',
+      'P.DMG Bonus%',
+      'Crit DMG Bonus',
+      'DEX',
+      'DEX%',
+      'Final Crit',
+      'Final ASPD',
+      'P.ATK%'
+    ])].filter(Boolean);
+  }
+  return getRecommendationStats();
+}
+function statTagsForItem(item, limit=99){
+  const displayStats = itemStatLines(item).slice(0, Math.min(limit, allowedStatLineCount(item.quality, item.level)));
+  const highlightStats = recommendationHighlightStats();
+  return displayStats.map((s,idx)=>{
+    const match = highlightStats.includes(s) ? ' good' : '';
+    return `<span class="tag${match}">${idx+1}. ${escapeHtml(s)} <span class="muted">${escapeHtml(statValue(s,item.quality))}</span></span>`;
+  }).join('');
+}
+function init(){
+  optionize($('category'), categories);
+  if($('inventoryCategoryFilter')) $('inventoryCategoryFilter').innerHTML = '<option value="">All categories</option>' + categories.map(x=>`<option value="${escapeAttr(x)}">${x}</option>`).join('');
+  if($('calcElementTarget')) $('calcElementTarget').innerHTML = '<option value="Any">Any selected element</option>' + COMBINED_ELEMENT_STATS.map(x=>`<option value="${escapeAttr(x)}">${x}</option>`).join('');
+  optionize($('buildProfile'), Object.keys(buildProfiles));
+  ['affix1','affix2','affix3'].forEach(id=>optionize($(id), affixFamilies, true));
+  ['affixLevel1','affixLevel2','affixLevel3'].forEach(id=>optionize($(id), roman));
+  statLineValues = [];
+  loadUserDefaultStatValues();
+  loadStatOverrides();
+  loadCalcSettings();
+  try{ if($('calcElementTarget') && !JSON.parse(getAppItem(APP_DATA_KEYS.calcSettings) || '{}').calcElementTarget) $('calcElementTarget').value = 'Holy/Neutral Enhance'; }catch(e){ if($('calcElementTarget')) $('calcElementTarget').value = 'Holy/Neutral Enhance'; }
+  renderStatLineSelectors([]);
+  renderNeededStatSelectors(DEFAULT_SIZE_ATTRIBUTE_PRIORITY_STATS);
+  renderChecks('priorityStats', allStats, buildProfiles[$('buildProfile').value]);
+  load();
+  persistStatOverrides();
+  bind();
+  updateFlashState();
+  renderAll();
+}
+function bind(){
+  ['category','flash','affix1','affix2','affix3','affixLevel1','affixLevel2','affixLevel3','recommendStyle','note'].forEach(id=>$(id).addEventListener('input', renderAll));
+  CALC_INPUT_IDS.forEach(id=>{ const el=$(id); if(el) el.addEventListener('input',()=>{saveCalcSettings(false); renderAll();}); });
+  if($('saveCalcSettingsBtn')) $('saveCalcSettingsBtn').addEventListener('click',()=>saveCalcSettings(true));
+  if($('loadBuildPresetBtn')) $('loadBuildPresetBtn').addEventListener('click', loadCurrentLargeBuildPreset);
+  if($('resetCalcSettingsBtn')) $('resetCalcSettingsBtn').addEventListener('click', resetCalcSettings);
+  $('quality').addEventListener('change',()=>{updateFlashState();renderStatLineSelectors(getRawStatLineValues());renderAll();});
+  $('level').addEventListener('change',()=>{clampLevelInput();renderStatLineSelectors(getRawStatLineValues());renderAll();});
+  $('buildProfile').addEventListener('change',()=>{renderNeededStatSelectors(buildProfiles[$('buildProfile').value]); renderChecks('priorityStats', allStats, buildProfiles[$('buildProfile').value]); renderAll();});
+  $('statLines').addEventListener('change',()=>{ statLineValues = getRawStatLineValues(); renderAll(); });
+  $('priorityStats').addEventListener('change', renderAll);
+  $('neededStatPickers').addEventListener('change',()=>{updateNeededStatHint(); renderAll();});
+  $('saveBtn').addEventListener('click', saveCurrent);
+  $('resetFormBtn').addEventListener('click', resetForm);
+  $('clearBtn').addEventListener('click',()=>{ if(confirm('Clear all saved Divinities?')){inventory=[];persist();renderAll();} });
+  $('searchBox').addEventListener('input', renderRecommendations);
+  if($('inventoryCategoryFilter')) $('inventoryCategoryFilter').addEventListener('change', renderInventory);
+  $('exportBtn').addEventListener('click', exportData);
+  $('importBtn').addEventListener('click', importData);
+  $('saveStatValuesBtn').addEventListener('click', saveStatValuesFromTable);
+  $('setDefaultStatValuesBtn').addEventListener('click', setCurrentStatValuesAsDefault);
+  $('resetStatValuesBtn').addEventListener('click', resetStatValues);
+  document.querySelectorAll('.tabBtn').forEach(btn=>btn.addEventListener('click',()=>activateTab(btn.dataset.tabTarget)));
+  $('statRef').addEventListener('change', e=>{
+    if(e.target.classList.contains('statValueInput')){
+      saveStatValuesFromTable(false);
+    }
+  });
+}
+function updateFlashState(){
+  if($('quality').value !== 'Gold') {$('flash').value='false'; $('flash').disabled=true;} else {$('flash').disabled=false;}
+}
+function currentItem(){
+  const affixes = [1,2,3].map(i=>({family:$('affix'+i).value, level:$('affixLevel'+i).value})).filter(a=>a.family);
+  const lines = getFormStatLines();
+  return {
+    category:$('category').value,
+    quality:$('quality').value,
+    statLines: lines,
+    mainStat: lines[0] || '',
+    secondaries: lines.slice(1),
+    flash:$('flash').value==='true' && $('quality').value==='Gold',
+    affixes,
+    note:$('note').value.trim(),
+    level:clampLevel($('level').value||1)
+  };
+}
+function numericInput(id, fallback=0){
+  const el = $(id);
+  if(!el) return fallback;
+  const n = Number(el.value);
+  return Number.isFinite(n) ? n : fallback;
+}
+function parseStatNumber(value){
+  const match = String(value ?? '').replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
+  return match ? Number(match[0]) : 0;
+}
+function statNumericValue(stat, quality){
+  return parseStatNumber(statValue(stat, quality));
+}
+function inferDamageType(){
+  const selected = $('calcDamageType')?.value || 'auto';
+  if(selected !== 'auto') return selected;
+  const profile = $('buildProfile')?.value || '';
+  if(/magic/i.test(profile)) return 'magic';
+  return 'physical';
+}
+function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+function calcSettings(){
+  return {
+    type: inferDamageType(),
+    pAtk: Math.max(0, numericInput('calcPAtk', 0)),
+    mAtk: Math.max(0, numericInput('calcMAtk', 0)),
+    minFactor: Math.max(0, numericInput('calcMinFactor', 5)) / 100,
+    pPen: numericInput('calcPPen', 0),
+    mPen: numericInput('calcMPen', 0),
+    targetPDef: numericInput('calcTargetPDef', 0),
+    targetMDef: numericInput('calcTargetMDef', 0),
+    pDmgPct: numericInput('calcPDmgPercent', 0),
+    pFinalDmgPct: numericInput('calcFinalPDmgPercent', 0),
+    finalAspd: numericInput('calcASPD', 0),
+    currentDex: numericInput('calcCurrentDex', 0),
+    pAtkPerDex: numericInput('calcPAtkPerDex', 0),
+    mDmgPct: numericInput('calcMDmgPercent', 0),
+    pFlat: numericInput('calcPFlatBonus', 0),
+    mFlat: numericInput('calcMFlatBonus', 0),
+    element: numericInput('calcElement', 0),
+    elementTarget: $('calcElementTarget')?.value || 'Any',
+    skill: numericInput('calcSkill', 0),
+    race: numericInput('calcRace', 0),
+    sizeTarget: $('calcSizeTarget')?.value || 'Any',
+    size: numericInput('calcSize', 100),
+    useCrit: ($('calcUseCrit')?.value || 'false') === 'true',
+    crit: numericInput('calcCrit', 0),
+    antiCrit: numericInput('calcAntiCrit', 0),
+    critDmg: numericInput('calcCritDmg', 0),
+    baseCritDmg: numericInput('calcBaseCritDmg', 200),
+    flashPriority: ($('calcFlashPriority')?.value || 'true') === 'true',
+    flashElementMode: $('calcFlashElementMode')?.value || 'same',
+    flashSameDmg: numericInput('calcFlashSameDmg', 84),
+    flashDifferentDmg: numericInput('calcFlashDifferentDmg', 28),
+    flashUptime: Math.max(0, Math.min(100, numericInput('calcFlashUptime', 50))),
+    flashRaceDmg: numericInput('calcFlashRaceDmg', 5),
+    flashDmg: numericInput('calcFlashDmg', 0)
+  };
+}
+
+function dpsTargetGoals(){
+  return {
+    critDmg: Math.max(0, numericInput('targetCritDmgGoal', 1000)),
+    finalP: Math.max(0, numericInput('targetFinalPDmgGoal', 350)),
+    finalCrit: Math.max(0, numericInput('targetFinalCritGoal', 200)),
+    finalAspd: Math.max(0, numericInput('targetFinalAspdGoal', 700)),
+    holyNeutral: Math.max(0, numericInput('targetHolyNeutralGoal', 320)),
+    sizeCounter: Math.max(0, numericInput('targetSizeCounterGoal', 250))
+  };
+}
+function dpsCurrentValues(settings=calcSettings()){
+  return {
+    critDmg: Math.max(0, settings.critDmg || 0),
+    finalP: Math.max(0, settings.pFinalDmgPct || 0),
+    finalCrit: Math.max(0, settings.crit || 0),
+    finalAspd: Math.max(0, settings.finalAspd || 0),
+    holyNeutral: Math.max(0, settings.element || 0),
+    sizeCounter: Math.max(0, settings.race || 0)
+  };
+}
+function targetGapContribution(current, itemValue, target, weight){
+  if(!itemValue || itemValue <= 0) return 0;
+  const t = Math.max(1, target || 0);
+  const beforeGap = Math.max(0, t - (current || 0));
+  const needRatio = clamp01(beforeGap / t);
+  if(beforeGap <= 0){
+    return weight * 0.18 + Math.min(weight * 0.10, (itemValue / t) * weight * 0.35);
+  }
+  const useful = Math.min(itemValue, beforeGap);
+  const overflow = Math.max(0, itemValue - beforeGap);
+  return weight * (0.42 + 0.58 * needRatio) + (useful / t) * weight * 2.2 + (overflow / t) * weight * 0.18;
+}
+function sumValues(items, statNames){
+  return (items || []).reduce((total, item) => total + itemStatValueSum(item, statNames), 0);
+}
+function sizeStatApplies(stat, target){
+  if(target === 'Any') return stat.startsWith('Bonus DMG to ');
+  return stat === `Bonus DMG to ${target}`;
+}
+function elementStatApplies(stat, target){
+  return COMBINED_ELEMENT_STATS.includes(stat) && (target === 'Any' || stat === target);
+}
+function flashEffectiveFinalDmg(settings){
+  if(!settings || !settings.flashPriority) return Math.max(0, settings?.flashDmg || 0);
+  if(settings.flashElementMode === 'manual') return Math.max(0, settings.flashDmg || 0);
+  const raw = settings.flashElementMode === 'different' ? (settings.flashDifferentDmg || 0) : (settings.flashSameDmg || 0);
+  return Math.max(0, raw * Math.max(0, Math.min(100, settings.flashUptime || 0)) / 100);
+}
+function flashEffectiveRaceDmg(settings){
+  if(!settings || !settings.flashPriority) return 0;
+  return Math.max(0, settings.flashRaceDmg || 0);
+}
+function flashPriorityScore(item, settings=calcSettings()){
+  if(!item || !item.flash) return 0;
+  const effFinal = flashEffectiveFinalDmg(settings);
+  const effRace = flashEffectiveRaceDmg(settings);
+  const strongPriority = settings.flashPriority ? 120 : 8;
+  return strongPriority + effFinal * 2.1 + effRace * 7 + (item.quality === 'Gold' ? 18 : 0) + clampLevel(item.level || 1) * 2;
+}
+function flashSummaryLabel(settings=calcSettings()){
+  const effFinal = flashEffectiveFinalDmg(settings);
+  const effRace = flashEffectiveRaceDmg(settings);
+  if(!settings.flashPriority) return `Flash tie-break only · manual Final DMG ${formatOverviewValue('Final P.DMG Bonus', effFinal)}`;
+  const mode = settings.flashElementMode === 'different' ? 'different element' : (settings.flashElementMode === 'manual' ? 'manual' : 'same highest element');
+  return `Flash priority ON · ${mode} · effective Final DMG ${formatOverviewValue('Final P.DMG Bonus', effFinal)} · all-race ${formatOverviewValue('Bonus DMG to Large', effRace)}`;
+}
+function flashCounterAlignmentMultiplier(flags={}){
+  if(flags.size && flags.element) return 1.0;
+  if(flags.size || flags.element) return 0.55;
+  return 0.18;
+}
+function counterAlignedFlashScore(item, flags){
+  if(!item || !item.flash) return 0;
+  return flashPriorityScore(item) * flashCounterAlignmentMultiplier(flags || {});
+}
+function applyDivinityToCalc(settings, item){
+  const s = {...settings};
+  if(!item) return s;
+  const type = s.type;
+  const quality = item.quality || 'Gold';
+  itemStatLines(item).slice(0, allowedStatLineCount(item.quality, item.level)).forEach(stat => {
+    const v = statNumericValue(stat, quality);
+    if(!v) return;
+    if(type === 'physical'){
+      if(stat === 'P.ATK%') s.pAtk *= (1 + v/100);
+      if(stat === 'DEX') { s.currentDex = (s.currentDex || 0) + v; s.pAtk += v * (s.pAtkPerDex || 0); }
+      if(stat === 'DEX%') { const dexGain = (s.currentDex || 0) * v/100; s.currentDex = (s.currentDex || 0) + dexGain; s.pAtk += dexGain * (s.pAtkPerDex || 0); }
+      if(stat === 'Final ASPD') s.finalAspd = (s.finalAspd || 0) + v;
+      if(stat === 'Final P.PEN') s.pPen += v;
+      if(stat === 'P.DMG Bonus%') s.pDmgPct += v;
+      if(stat === 'Final P.DMG Bonus') s.pFinalDmgPct = (s.pFinalDmgPct || 0) + v;
+      if(stat === 'P.DMG Bonus') s.pFlat += v;
+    }
+    if(type === 'magic'){
+      if(stat === 'M.ATK%') s.mAtk *= (1 + v/100);
+      if(stat === 'Final M.PEN') s.mPen += v;
+      if(stat === 'M.DMG Bonus%' || stat === 'Final M.DMG Bonus') s.mDmgPct += v;
+      if(stat === 'M.DMG Bonus') s.mFlat += v;
+    }
+    if(elementStatApplies(stat, s.elementTarget)) s.element += v;
+    if(sizeStatApplies(stat, s.sizeTarget)) s.race += v;
+    if(stat === 'Final Crit') s.crit += v;
+    if(stat === 'Crit DMG Bonus') s.critDmg += v;
+  });
+  if(item.flash){
+    const flashFinal = flashEffectiveFinalDmg(s);
+    const flashRace = flashEffectiveRaceDmg(s);
+    if(type === 'physical') s.pFinalDmgPct = (s.pFinalDmgPct || 0) + flashFinal;
+    if(type === 'magic') s.mDmgPct += flashFinal;
+    s.race += flashRace;
+  }
+  return s;
+}
+function formulaDamage(s){
+  const isPhysical = s.type === 'physical';
+  const atk = isPhysical ? s.pAtk : s.mAtk;
+  const pen = isPhysical ? s.pPen : s.mPen;
+  const targetDef = isPhysical ? s.targetPDef : s.targetMDef;
+  const dmgPct = isPhysical ? ((s.pDmgPct || 0) + (s.pFinalDmgPct || 0)) : s.mDmgPct;
+  const flat = isPhysical ? s.pFlat : s.mFlat;
+  const penFactor = Math.max(s.minFactor, 1 + (pen - targetDef) / 100);
+  let base = atk * penFactor * (1 + dmgPct/100) * (1 + s.element/100) * (1 + s.skill/100) * (1 + s.race/100) * (s.size/100) + flat;
+  if(isPhysical){
+    const aspdMultiplier = Math.max(0.05, 1 + ((s.finalAspd || 0) / 100));
+    base *= aspdMultiplier;
+  }
+  if(!s.useCrit) return Math.max(0, base);
+  const critRate = clamp01((s.crit - s.antiCrit) / 100);
+  const critMultiplier = Math.max(1, s.baseCritDmg/100 + s.critDmg/100);
+  return Math.max(0, base * (1 + critRate * (critMultiplier - 1)));
+}
+function damageReport(item){
+  const baseSettings = calcSettings();
+  const base = formulaDamage(baseSettings);
+  const modified = formulaDamage(applyDivinityToCalc(baseSettings, item));
+  const gain = modified - base;
+  const gainPct = base > 0 ? (gain / base) * 100 : 0;
+  return {base, modified, gain, gainPct, type: baseSettings.type};
+}
+function dpsTargetSizeStats(){
+  const target = $('calcSizeTarget')?.value || 'Any';
+  if(target === 'Any') return ['Bonus DMG to Large','Bonus DMG to Medium','Bonus DMG to Small'];
+  return [`Bonus DMG to ${target}`];
+}
+function dpsTargetElementStat(){
+  const target = $('calcElementTarget')?.value || 'Any';
+  return target === 'Any' ? 'Holy/Neutral Enhance' : target;
+}
+function itemStatValueSum(item, statNames){
+  const names = Array.isArray(statNames) ? statNames : [statNames];
+  const lines = itemStatLines(item).slice(0, allowedStatLineCount(item.quality, item.level));
+  const q = item.quality || 'Gold';
+  return lines.reduce((sum, stat) => sum + (names.includes(stat) ? statNumericValue(stat, q) : 0), 0);
+}
+function itemHasAnyStat(item, statNames){
+  const names = Array.isArray(statNames) ? statNames : [statNames];
+  const lines = itemStatLines(item).slice(0, allowedStatLineCount(item.quality, item.level));
+  return lines.some(stat => names.includes(stat));
+}
+function firstStatPositionBonus(item, statNames, maxBonus=18){
+  const names = Array.isArray(statNames) ? statNames : [statNames];
+  const lines = itemStatLines(item).slice(0, allowedStatLineCount(item.quality, item.level));
+  const idx = lines.findIndex(stat => names.includes(stat));
+  return idx >= 0 ? Math.max(0, maxBonus - idx*3) : 0;
+}
+function dpsBalanceDetails(item, contextGains={}){
+  const settings = calcSettings();
+  const goals = dpsTargetGoals();
+  const current = dpsCurrentValues(settings);
+  const sizeStats = dpsTargetSizeStats();
+  const elementStat = dpsTargetElementStat();
+  const allElementValue = itemStatValueSum(item, COMBINED_ELEMENT_STATS);
+  const sizeValue = itemStatValueSum(item, sizeStats);
+  const finalPValue = itemStatValueSum(item, 'Final P.DMG Bonus');
+  const pDmgPercentValue = itemStatValueSum(item, 'P.DMG Bonus%');
+  const elementValue = itemStatValueSum(item, elementStat);
+  const critDmgValue = itemStatValueSum(item, 'Crit DMG Bonus');
+  const dexValue = itemStatValueSum(item, 'DEX') + itemStatValueSum(item, 'DEX%');
+  const finalCritValue = itemStatValueSum(item, 'Final Crit');
+  const finalAspdValue = itemStatValueSum(item, 'Final ASPD');
+  const patkValue = itemStatValueSum(item, 'P.ATK%') + (itemStatValueSum(item, 'P.DMG Bonus') > 0 ? 1 : 0);
+  const flashFinalValue = item.flash ? flashEffectiveFinalDmg(settings) : 0;
+  const flashRaceValue = item.flash ? flashEffectiveRaceDmg(settings) : 0;
+  const flashScoreValue = flashPriorityScore(item, settings);
+  const ctx = {
+    sizeCounter: contextGains.sizeCounter || 0,
+    finalP: contextGains.finalP || 0,
+    holyNeutral: contextGains.holyNeutral || 0,
+    critDmg: contextGains.critDmg || 0,
+    finalCrit: contextGains.finalCrit || 0,
+    finalAspd: contextGains.finalAspd || 0
+  };
+  const effectiveCritRate = clamp01(((settings.crit || 0) + (ctx.finalCrit || 0) + finalCritValue - (settings.antiCrit || 0)) / 100);
+  const critEffectFactor = 0.35 + 0.65 * effectiveCritRate;
+  const coreFlags = {
+    size: sizeValue > 0,
+    finalP: finalPValue > 0,
+    element: elementValue > 0,
+    critDmg: critDmgValue > 0,
+    dex: dexValue > 0,
+    finalCrit: finalCritValue > 0,
+    finalAspd: finalAspdValue > 0,
+    flash: !!item.flash
+  };
+  const coreCount = Object.values(coreFlags).filter(Boolean).length;
+  const primaryCount = [coreFlags.size, coreFlags.finalP, coreFlags.element, coreFlags.critDmg].filter(Boolean).length;
+  let score = 0;
+  // v28 priority: Final P.DMG Bonus and Size Counter must lead the recommendation; Attribute Counter remains next.
+  score += targetGapContribution(current.finalP + ctx.finalP, finalPValue, goals.finalP, 265) + (coreFlags.finalP ? firstStatPositionBonus(item, 'Final P.DMG Bonus', 44) : -82);
+  score += targetGapContribution(current.sizeCounter + ctx.sizeCounter, sizeValue, goals.sizeCounter, 245) + (coreFlags.size ? firstStatPositionBonus(item, sizeStats, 42) : -78);
+  score += targetGapContribution(current.holyNeutral + ctx.holyNeutral, elementValue, goals.holyNeutral, 145) + (coreFlags.element ? firstStatPositionBonus(item, elementStat, 24) : (allElementValue > 0 ? -8 : -28));
+  score += targetGapContribution(current.critDmg + ctx.critDmg, critDmgValue, goals.critDmg, 86) * critEffectFactor + (coreFlags.critDmg ? firstStatPositionBonus(item, 'Crit DMG Bonus', 14) : 0);
+  score += targetGapContribution(current.finalCrit + ctx.finalCrit, finalCritValue, goals.finalCrit, 74) + (coreFlags.finalCrit ? firstStatPositionBonus(item, 'Final Crit', 13) : 0);
+  score += targetGapContribution(current.finalAspd + ctx.finalAspd, finalAspdValue, goals.finalAspd, 68) + (coreFlags.finalAspd ? firstStatPositionBonus(item, 'Final ASPD', 12) : 0);
+  score += coreFlags.dex ? 44 + firstStatPositionBonus(item, ['DEX','DEX%'], 11) : 0;
+  score += pDmgPercentValue > 0 ? 22 + firstStatPositionBonus(item, 'P.DMG Bonus%', 7) : 0;
+  score += patkValue > 0 ? 18 : 0;
+  if(coreFlags.flash){
+    const flashAlignment = flashCounterAlignmentMultiplier(coreFlags);
+    score += flashScoreValue * flashAlignment;
+    score += targetGapContribution(current.finalP + ctx.finalP, flashFinalValue, goals.finalP, 48) * flashAlignment;
+    score += flashRaceValue > 0 ? 22 * flashAlignment : 0;
+  }
+  score += Math.pow(primaryCount, 2) * 6;
+  score += Math.max(0, coreCount - 3) * 12;
+  if(coreFlags.critDmg && (coreFlags.finalCrit || (current.finalCrit + ctx.finalCrit) >= goals.finalCrit * 0.70)) score += 28;
+  if(coreFlags.critDmg && !coreFlags.finalCrit && (current.finalCrit + ctx.finalCrit) < goals.finalCrit * 0.60) score -= 34;
+  if(coreFlags.dex && coreFlags.finalCrit && coreFlags.finalAspd) score += 30;
+  if(coreFlags.finalP && coreFlags.size) score += 120;
+  if(coreFlags.finalP && coreFlags.size && coreFlags.element) score += 44;
+  if(!coreFlags.finalP && !coreFlags.size) score -= 125;
+  else if(!coreFlags.finalP || !coreFlags.size) score -= 48;
+  if(coreFlags.flash && coreFlags.size && coreFlags.element) score += 34;
+  else if(coreFlags.flash && (coreFlags.size || coreFlags.element)) score += 14;
+  if(primaryCount <= 1 && !coreFlags.flash) score -= 18;
+  const targetSizeLabel = ($('calcSizeTarget')?.value || 'Any') === 'Any' ? 'Large / Medium / Small' : ($('calcSizeTarget')?.value || 'Any');
+  const matched = [];
+  if(coreFlags.finalP) matched.push('Top priority Final P.DMG Bonus');
+  if(coreFlags.size) matched.push(`Top priority Size Counter: ${targetSizeLabel}`);
+  if(coreFlags.element) matched.push(`Attribute Counter: ${elementStat}`);
+  else if(allElementValue > 0) matched.push('Other element Enhance');
+  if(coreFlags.critDmg) matched.push(`Crit DMG Bonus${coreFlags.finalCrit || (current.finalCrit + ctx.finalCrit) >= goals.finalCrit * .7 ? '' : ' (needs more Final Crit)'}`);
+  if(coreFlags.dex) matched.push('DEX / DEX%');
+  if(coreFlags.finalCrit) matched.push('Final Crit');
+  if(coreFlags.finalAspd) matched.push('Final ASPD');
+  if(coreFlags.flash) matched.push(`Flash priority (${flashSummaryLabel(settings)})`);
+  return {
+    score, matched, coreFlags, primaryCount, coreCount, targetSizeLabel, elementStat, effectiveCritRate,
+    gains:{sizeCounter:sizeValue + flashRaceValue, finalP:finalPValue + flashFinalValue, holyNeutral:elementValue, critDmg:critDmgValue, finalCrit:finalCritValue, finalAspd:finalAspdValue, dex:dexValue, flashFinal:flashFinalValue, flashRace:flashRaceValue}
+  };
+}
+function dpsBalanceLabel(item){
+  const d = dpsBalanceDetails(item);
+  return d.matched.length ? `DPS balance: ${d.matched.join(' · ')}` : `DPS balance: missing top-priority Final P.DMG Bonus and Size Counter; then check Attribute Counter (${d.elementStat}), Crit DMG Bonus, Final Crit, Final ASPD, and DEX`;
+}
+function formatNumber(n){
+  if(!Number.isFinite(n)) return '0';
+  return Math.round(n).toLocaleString();
+}
+function formatPct(n){
+  if(!Number.isFinite(n)) return '0.00%';
+  return `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`;
+}
+function isPercentLikeStat(stat){
+  return /%/.test(stat)
+    || /Enhance|Final ASPD|Final Haste|Final Crit|Final Anti-Crit|Crit DMG Bonus|Size Counter|Bonus DMG to|Lifesteal|Reflect|DMG RED|Final P\.DMG Bonus|Final M\.DMG Bonus|Final P\.PEN|Final M\.PEN/i.test(stat);
+}
+function formatOverviewNumber(n){
+  if(!Number.isFinite(n)) return '0';
+  return Math.abs(n % 1) > 0.0001 ? n.toFixed(2).replace(/\.00$/,'') : Math.round(n).toLocaleString();
+}
+function formatOverviewValue(stat, total){
+  const sign = total >= 0 ? '+' : '';
+  return `${sign}${formatOverviewNumber(total)}${isPercentLikeStat(stat) ? '%' : ''}`;
+}
+function aggregateGatheredStats(items){
+  const totals = {};
+  (items || []).forEach(item => {
+    const quality = item.quality || 'Gold';
+    itemStatLines(item).slice(0, allowedStatLineCount(item.quality, item.level)).forEach(stat => {
+      const value = statNumericValue(stat, quality);
+      if(!Number.isFinite(value) || value === 0) return;
+      totals[stat] = (totals[stat] || 0) + value;
+    });
+  });
+  return totals;
+}
+function recommendedBestByCategoryItems(){
+  if(($('recommendStyle')?.value || '') === 'dpsPhysical'){
+    const picked = [];
+    const gains = {sizeCounter:0, finalP:0, holyNeutral:0, critDmg:0, finalCrit:0, finalAspd:0};
+    categories.forEach(cat => {
+      const best = inventory
+        .filter(it => it.category === cat)
+        .map((it,i)=>({...it,score:scoreItemWithContext(it, gains), idx:i}))
+        .sort((a,b)=>b.score-a.score)[0];
+      if(best){
+        picked.push(best);
+        const d = dpsBalanceDetails(best, gains);
+        gains.sizeCounter += d.gains.sizeCounter || 0;
+        gains.finalP += d.gains.finalP || 0;
+        gains.holyNeutral += d.gains.holyNeutral || 0;
+        gains.critDmg += d.gains.critDmg || 0;
+        gains.finalCrit += d.gains.finalCrit || 0;
+        gains.finalAspd += d.gains.finalAspd || 0;
+      }
+    });
+    return picked;
+  }
+  return categories.map(cat => inventory
+    .map((it,i)=>({...it,score:scoreItem(it), idx:i}))
+    .filter(it => it.category === cat)
+    .sort((a,b)=>b.score-a.score)[0]
+  ).filter(Boolean);
+}
+function renderDpsTargetProgress(items, title='DPS Target Progress'){
+  const goals = dpsTargetGoals();
+  const current = dpsCurrentValues(calcSettings());
+  const sizeStats = dpsTargetSizeStats();
+  const elementStat = dpsTargetElementStat();
+  const rows = [
+    {key:'finalP', label:'Final P.DMG Bonus', current:current.finalP, gain:sumValues(items, 'Final P.DMG Bonus'), target:goals.finalP, priority:'Top priority'},
+    {key:'sizeCounter', label:'Size Counter', current:current.sizeCounter, gain:sumValues(items, sizeStats), target:goals.sizeCounter, priority:'Top priority'},
+    {key:'holyNeutral', label:elementStat, current:current.holyNeutral, gain:sumValues(items, elementStat), target:goals.holyNeutral, priority:'High'},
+    {key:'critDmg', label:'Crit DMG Bonus', current:current.critDmg, gain:sumValues(items, 'Crit DMG Bonus'), target:goals.critDmg, priority:'High, needs Final Crit'},
+    {key:'finalCrit', label:'Final Crit', current:current.finalCrit, gain:sumValues(items, 'Final Crit'), target:goals.finalCrit, priority:'Crucial'},
+    {key:'finalAspd', label:'Final ASPD', current:current.finalAspd, gain:sumValues(items, 'Final ASPD'), target:goals.finalAspd, priority:'Crucial'}
+  ];
+  const cards = rows.map(r=>{
+    const total = (r.current || 0) + (r.gain || 0);
+    const pct = r.target > 0 ? clamp01(total / r.target) * 100 : 100;
+    const missing = Math.max(0, (r.target || 0) - total);
+    const cls = missing <= 0 ? 'good' : pct >= 70 ? 'warn' : 'bad';
+    return `<div class="targetCard">
+      <b>${escapeHtml(r.label)}</b>
+      <div class="targetNumbers">Current ${formatOverviewValue(r.label, r.current || 0)} + Suggested ${formatOverviewValue(r.label, r.gain || 0)}<br>Target ${formatOverviewValue(r.label, r.target || 0)} · <span class="${cls}">${missing <= 0 ? 'Target met' : 'Missing ' + formatOverviewValue(r.label, missing)}</span><br><span class="muted">${escapeHtml(r.priority)}</span></div>
+      <div class="miniBar"><span style="width:${pct}%"></span></div>
+    </div>`;
+  }).join('');
+  return `<div class="targetOverview"><h3>${escapeHtml(title)}</h3><p class="hint">Balanced against your targets with Final P.DMG Bonus and Size Counter prioritized first: Final P.DMG Bonus 350, Size Counter 250, Holy/Neutral Enhance 320, Crit DMG Bonus 1000, Final Crit 200, and Final ASPD 700.</p><div class="targetGrid">${cards}</div></div>`;
+}
+function renderAttributeOverview(items, title='Divinity Attribute Overview', subtitle=''){
+  const totals = aggregateGatheredStats(items);
+  const statsInOrder = allStats.filter(stat => totals[stat] !== undefined && totals[stat] !== 0);
+  const cards = statsInOrder.map(stat => `
+    <div class="attributePill" title="${escapeAttr(stat)}">
+      <div class="attributeName">${escapeHtml(stat)}</div>
+      <div class="attributeValue">${escapeHtml(formatOverviewValue(stat, totals[stat]))}</div>
+    </div>`).join('');
+  const sub = subtitle ? `<div class="attributeOverviewSub">${escapeHtml(subtitle)}</div>` : '';
+  return `<div class="attributeOverview">
+    <div class="attributeOverviewHeader"><div class="attributeOverviewTitle">${escapeHtml(title)}</div></div>
+    ${sub}
+    ${cards ? `<div class="attributeGrid">${cards}</div>` : `<div class="attributeEmpty">No gathered stats yet.</div>`}
+  </div>`;
+}
+function affixScoreForItem(item, multiplier=1){
+  let total = 0;
+  (item.affixes || []).forEach(a=>{
+    const levelValue = Math.max(1, roman.indexOf(a.level)+1);
+    total += (12 * multiplier * affixPreference(a.family)) + (levelValue * 1.5);
+  });
+  return total;
+}
+function damageGainLabel(item){
+  const r = damageReport(item);
+  return `${r.type === 'physical' ? 'P' : 'M'} damage ${formatPct(r.gainPct)} · ${formatNumber(r.modified)}`;
+}
+function renderDamageSummary(){
+  const box = $('damageSummary');
+  if(!box) return;
+  const report = damageReport(currentItem());
+  box.innerHTML = `
+    <div class="calcMetric"><span class="muted">Baseline ${report.type === 'physical' ? 'Physical' : 'Magic'} damage</span><b>${formatNumber(report.base)}</b></div>
+    <div class="calcMetric"><span class="muted">With current Divinity form</span><b>${formatNumber(report.modified)}</b></div>
+    <div class="calcMetric"><span class="muted">Estimated gain</span><b class="${report.gainPct >= 0 ? 'good' : 'bad'}">${formatPct(report.gainPct)}</b></div>
+    <div class="calcMetric"><span class="muted">DPS target priority</span><b>${escapeHtml((($('calcSizeTarget')?.value || 'Any') === 'Any' ? 'Any size' : $('calcSizeTarget').value) + ' · ' + dpsTargetElementStat())}</b></div>
+    <div class="calcMetric"><span class="muted">Flash recommendation priority</span><b>${escapeHtml(flashSummaryLabel(calcSettings()))}</b></div>`;
+}
+function saveCalcSettings(show=true){
+  const data = {};
+  CALC_INPUT_IDS.forEach(id => { const el = $(id); if(el) data[id] = el.value; });
+  setAppItem(APP_DATA_KEYS.calcSettings, JSON.stringify(data));
+  const st = $('calcStatus'); if(st) st.textContent = 'Damage settings saved.';
+  if(show) alert('Damage formula settings saved.');
+}
+function loadCalcSettings(){
+  try{
+    const data = JSON.parse(getAppItem(APP_DATA_KEYS.calcSettings) || '{}');
+    Object.entries(data || {}).forEach(([id,value]) => { const el = $(id); if(el) el.value = value; });
+  }catch(e){}
+}
+function applyCalcSettingsObject(data){
+  Object.entries(data || {}).forEach(([id,value]) => { const el = $(id); if(el) el.value = value; });
+}
+function loadCurrentLargeBuildPreset(){
+  applyCalcSettingsObject(CURRENT_LARGE_BUILD_PRESET);
+  setNeededStats(DEFAULT_SIZE_ATTRIBUTE_PRIORITY_STATS);
+  saveCalcSettings(false);
+  const st = $('calcStatus'); if(st) st.textContent = 'Loaded your current large-size build preset with Final P.DMG Bonus and Size Counter priority.';
+  renderAll();
+  alert('Loaded your current large-size build preset. Recommendation priority is now Final P.DMG Bonus and Size Counter first, then Attribute Counter / Holy-Neutral Enhance, Crit DMG Bonus, Final Crit, Final ASPD, and DEX. Holy/Neutral is set conservatively to Holy Enhance 155.91%; change Current Attribute Counter / Element Enhance to 223.92% for Neutral targets. Flash priority is ON with same-element +84%, 50% uptime, and +5% all-race damage.');
+}
+function resetCalcSettings(){
+  if(!confirm('Reset all damage formula settings to your current large-size build preset from the screenshots?')) return;
+  removeAppItem(APP_DATA_KEYS.calcSettings);
+  applyCalcSettingsObject(CURRENT_LARGE_BUILD_PRESET);
+  setNeededStats(DEFAULT_SIZE_ATTRIBUTE_PRIORITY_STATS);
+  saveCalcSettings(false);
+  const st = $('calcStatus'); if(st) st.textContent = 'Damage settings reset to your current large-size build preset with Final P.DMG + Size priority.';
+  renderAll();
+}
+function weights(){
+  const style = $('recommendStyle').value;
+  const base = {quality:16, main:26, secondary:12, flash:8, affix:12, level:1.5};
+  if(style==='stats') return {...base, quality:10, main:34, secondary:18, affix:8, flash:5};
+  if(style==='affix') return {...base, quality:10, main:18, secondary:8, affix:24, flash:6};
+  if(style==='quality') return {...base, quality:24, main:22, secondary:10, affix:8, flash:10};
+  return base;
+}
+function affixPreference(family){
+  const profile = $('buildProfile').value;
+  const pref = {
+    "Oblivion Realm / Anti-affix": {Judgment:1.2,"Curse Breaker":1.15,Prophet:1.15,Revelation:1.1,Annihilation:1.1,Ark:1.1},
+    "Tank / Sustain": {Judgment:1.15,"Curse Breaker":1.15,Prophet:1.15,Revelation:1.05,Annihilation:.9,Ark:1.1},
+    "Physical DPS": {Judgment:1.05,"Curse Breaker":.95,Prophet:1,Revelation:1,Annihilation:1.15,Ark:1.05},
+    "Magic DPS": {Judgment:1,"Curse Breaker":1,Prophet:1.05,Revelation:1.1,Annihilation:1.05,Ark:1.05},
+    "Crit / ASPD Physical": {Judgment:1,"Curse Breaker":.95,Prophet:1,Revelation:1.05,Annihilation:1.15,Ark:1.1},
+    "Support / Utility": {Judgment:1.05,"Curse Breaker":1.15,Prophet:1.1,Revelation:1.05,Annihilation:.9,Ark:1.1}
+  };
+  return (pref[profile] && pref[profile][family]) || 1;
+}
+function scoreItemWithContext(item, contextGains={}){
+  const dps = dpsBalanceDetails(item, contextGains);
+  const report = damageReport(item);
+  let score = dps.score;
+  score += Math.max(0, report.gainPct * 3.2);
+  score += neededMatchScore(item) * 0.20;
+  score += qualities[item.quality] * 7;
+  score += clampLevel(item.level||1) * 1.5;
+  score += counterAlignedFlashScore(item, dps.coreFlags) * 0.20;
+  score += affixScoreForItem(item, .45);
+  return Math.max(0, Math.round(score));
+}
+function scoreItem(item){
+  const style = $('recommendStyle').value;
+  if(style === 'dpsPhysical'){
+    return scoreItemWithContext(item, {});
+  }
+  if(style === 'needed'){
+    const {needed, matches} = neededMatchDetails(item);
+    let score = neededMatchScore(item);
+    score += qualities[item.quality] * 10;
+    score += clampLevel(item.level||1) * 2;
+    score += counterAlignedFlashScore(item, dpsBalanceDetails(item).coreFlags) * 0.12;
+    score += affixScoreForItem(item, .45);
+    if(needed.length && matches.length === needed.length) score += 25;
+    if(needed.length && matches.length === 0) score -= 25;
+    return Math.max(0, Math.round(score));
+  }
+  if(style === 'damage'){
+    const report = damageReport(item);
+    let score = Math.max(0, report.gainPct * 6);
+    score += neededMatchScore(item) * 0.35;
+    score += qualities[item.quality] * 8;
+    score += clampLevel(item.level||1) * 1.5;
+    score += counterAlignedFlashScore(item, dpsBalanceDetails(item).coreFlags) * 0.14;
+    score += affixScoreForItem(item, .55);
+    return Math.max(0, Math.round(score));
+  }
+  const p = getRecommendationStats();
+  const lines = itemStatLines(item).slice(0, allowedStatLineCount(item.quality, item.level));
+  const w = weights();
+  let score = qualities[item.quality] * w.quality;
+  if(lines[0] && p.includes(lines[0])) score += w.main;
+  score += lines.slice(1).filter(s=>p.includes(s)).length * w.secondary;
+  score += neededMatchScore(item) * 0.25;
+  score += item.flash ? Math.max(w.flash, counterAlignedFlashScore(item, dpsBalanceDetails(item).coreFlags) * 0.10) : 0;
+  score += clampLevel(item.level||1) * w.level;
+  score += affixScoreForItem(item, w.affix/12);
+  const matches = lines.filter(s=>p.includes(s)).length;
+  if(matches===0) score -= 10;
+  return Math.max(0, Math.round(score));
+}
+function verdict(score){
+  if(score>=120) return ['Excellent','good'];
+  if(score>=90) return ['Very good','good'];
+  if(score>=65) return ['Usable','warn'];
+  return ['Low priority','bad'];
+}
+function renderPreview(){
+  const item = currentItem(); const s = scoreItem(item); const v = verdict(s);
+  const dmg = damageReport(item);
+  $('previewScore').textContent = s;
+  $('previewBar').style.width = Math.min(100,s/1.5)+'%';
+  const dmgText = $('recommendStyle').value === 'damage' ? ` Estimated ${dmg.type} damage gain: <b class="${dmg.gainPct>=0?'good':'bad'}">${formatPct(dmg.gainPct)}</b> (${formatNumber(dmg.base)} → ${formatNumber(dmg.modified)}).` : '';
+  $('previewVerdict').innerHTML = `<span class="${v[1]}">${v[0]}</span> for ${escapeHtml($('buildProfile').value)}.${dmgText} ${explainItem(item)}`;
+  renderAffixDescriptions(item.affixes);
+}
+function explainItem(item){
+  const p = getRecommendationStats();
+  const matches = itemStatLines(item).filter(s=>p.includes(s));
+  if(matches.length) return `Matching stats: ${matches.slice(0,5).join(', ')}${matches.length>5?'...':''}.`;
+  return 'No matching priority stat selected yet.';
+}
+function saveCurrent(){
+  const item = currentItem();
+  const idx = $('editingIndex').value;
+  if(idx !== '') inventory[Number(idx)] = item; else inventory.push(item);
+  persist(); resetForm(); renderAll();
+}
+function resetForm(){
+  $('editingIndex').value='';
+  $('category').selectedIndex=0;
+  $('quality').value='Gold';
+  $('level').value=1;
+  statLineValues = [];
+  renderStatLineSelectors([]);
+  $('flash').value='false';
+  $('note').value='';
+  [1,2,3].forEach(i=>{$('affix'+i).value=''; $('affixLevel'+i).value='I'});
+  updateFlashState();
+  $('saveBtn').textContent='Save Divinity';
+  renderAll();
+}
+function itemLabel(item){
+  if(!item) return 'this Divinity';
+  const stats = itemStatLines(item).slice(0,4).join(', ');
+  return `${item.category || 'Divinity'} — ${item.quality || ''}${item.flash ? ' Flash' : ''}${stats ? ' — ' + stats : ''}`;
+}
+function editItem(i){
+  const item = inventory[i];
+  if(!item) return;
+  const ok = window.confirm(`Edit this Divinity?\n\n${itemLabel(item)}\n\nAny unsaved entries currently in the form will be replaced.`);
+  if(!ok) return;
+  const lines = itemStatLines(item);
+  $('editingIndex').value=i;
+  $('category').value=item.category;
+  $('quality').value=item.quality;
+  $('level').value=clampLevel(item.level||1);
+  renderStatLineSelectors(lines);
+  $('flash').value=String(!!item.flash);
+  $('note').value=item.note||'';
+  [1,2,3].forEach(n=>{ const a=(item.affixes||[])[n-1]||{}; $('affix'+n).value=a.family||''; $('affixLevel'+n).value=a.level||'I'; });
+  updateFlashState();
+  $('saveBtn').textContent='Update Divinity';
+  renderAll();
+  window.scrollTo({top:350,behavior:'smooth'});
+}
+function deleteItem(i){
+  const item = inventory[i];
+  if(!item) return;
+  const ok = window.confirm(`Delete this Divinity?\n\n${itemLabel(item)}\n\nThis action cannot be undone.`);
+  if(!ok) return;
+  inventory.splice(i,1); persist(); renderAll();
+}
+function renderInventory(){
+  const selectedCategory = $('inventoryCategoryFilter')?.value || '';
+  const visibleItems = inventory
+    .map((it,i)=>({...it,score:scoreItem(it), idx:i}))
+    .filter(it => !selectedCategory || it.category === selectedCategory)
+    .sort((a,b)=>b.score-a.score);
+  const rows = visibleItems.map(it=>{
+    const v=verdict(it.score); const statTags=statTagsForItem(it);
+    const aff=(it.affixes||[]).map(a=>`<span class="tag">${escapeHtml(a.family)} ${a.level}</span>`).join('')||'<span class="muted">None</span>';
+    const dmgLine = $('recommendStyle').value === 'damage' ? `<div class="muted">${escapeHtml(damageGainLabel(it))}</div>` : '';
+    return `<tr><td><b class="${v[1]}">${it.score}</b><div class="muted">${v[0]}</div>${dmgLine}</td><td>${escapeHtml(it.category)}</td><td><span class="quality ${it.quality}">${it.quality}</span></td><td><div class="tags">${statTags}</div></td><td>${it.flash?'Yes':'No'}</td><td><div class="tags">${aff}</div></td><td>${escapeHtml(it.note||'')}<div class="muted">Lv. ${clampLevel(it.level||1)}</div></td><td class="noPrint"><button class="secondary small" onclick="editItem(${it.idx})">Edit</button> <button class="danger small" onclick="deleteItem(${it.idx})">Delete</button></td></tr>`;
+  }).join('');
+  const emptyMessage = selectedCategory ? `No saved Divinity found for ${escapeHtml(selectedCategory)}.` : 'No Divinity saved yet.';
+  $('inventoryBody').innerHTML = rows || `<tr><td colspan="8" class="muted">${emptyMessage}</td></tr>`;
+}
+function bestOverallItem(){
+  if(!inventory.length) return null;
+  return inventory.map((it,i)=>({...it,score:scoreItem(it), idx:i})).sort((a,b)=>b.score-a.score)[0] || null;
+}
+function renderTopRecommendationSummary(){
+  const box = $('topRecommendationSummary');
+  if(!box) return;
+  const best = bestOverallItem();
+  const needed = getRecommendationStats();
+  if(!best){
+    box.innerHTML = `<div class="recommendSummary"><b>No saved Divinity yet.</b><p class="muted" style="margin:6px 0 0">Save your Divinities first, then choose your most needed stats to get a recommendation.</p></div>`;
+    return;
+  }
+  const v = verdict(best.score);
+  const d = neededMatchDetails(best);
+  const aff = (best.affixes||[]).map(a=>`${a.family} ${a.level}`).join(', ') || 'No affix';
+  const dmgLine = `<div class="summaryLine"><b>Formula damage estimate</b><br><span class="muted">${escapeHtml(damageGainLabel(best))}</span></div>`;
+  const dpsLine = $('recommendStyle').value === 'dpsPhysical' ? `<div class="summaryLine"><b>DPS balance priority</b><br><span class="good">${escapeHtml(dpsBalanceLabel(best))}</span></div>` : '';
+  const recommendedSet = recommendedBestByCategoryItems();
+  const targetProgress = renderDpsTargetProgress(recommendedSet, 'Target Progress from Recommended Set');
+  const bestTargetProgress = renderDpsTargetProgress([best], 'Target Progress from Best Divinity Only');
+  const setOverview = renderAttributeOverview(
+    recommendedSet,
+    'Divinity Attribute Overview',
+    `Gathered total from the current recommended set: ${recommendedSet.length} best pick${recommendedSet.length===1?'':'s'} across the 8 categories.`
+  );
+  const bestOverview = renderAttributeOverview(
+    [best],
+    'Best Divinity Stat Summary',
+    'Stats contained in the highest-ranked saved Divinity only.'
+  );
+  box.innerHTML = `<div class="recommendSummary">
+    <b>Recommended: ${escapeHtml(best.category)} — <span class="${v[1]}">${best.score}</span></b>
+    <p class="muted" style="margin:6px 0 0">Best saved Divinity based on ${$('recommendStyle').value==='dpsPhysical'?'DPS balance priority':('your selected needed stats' + ($('recommendStyle').value==='damage'?' plus damage formula estimate':''))}.</p>
+    <div class="summaryGrid">
+      <div class="summaryLine"><b>Quality / Level</b><br><span class="quality ${best.quality}">${best.quality}</span> · Lv. ${clampLevel(best.level||1)}${best.flash?' · Flash':''}</div>
+      <div class="summaryLine"><b>Needed stat matches</b><br><span class="good">${escapeHtml(d.matches.join(', ') || 'None')}</span>${d.missing.length?`<br><span class="muted">Missing: ${escapeHtml(d.missing.join(', '))}</span>`:''}</div>
+      <div class="summaryLine"><b>Stat line summary</b><br><div class="tags" style="margin-top:6px">${statTagsForItem(best)}</div></div>
+      <div class="summaryLine"><b>Affix summary</b><br><span class="muted">${escapeHtml(aff)}</span></div>
+      ${dpsLine}
+      ${dmgLine}
+      <div class="summaryLine"><b>Note</b><br><span class="muted">${escapeHtml(best.note || 'No note')}</span></div>
+    </div>
+  </div>${targetProgress}${bestTargetProgress}${setOverview}${bestOverview}`;
+}
+function renderRecommendations(){
+  renderTopRecommendationSummary();
+  const q = $('searchBox').value.toLowerCase();
+  const grouped = categories.map(cat=>{
+    const items = inventory.map((it,i)=>({...it,score:scoreItem(it), idx:i})).filter(it=>it.category===cat).sort((a,b)=>b.score-a.score);
+    return {cat, best:items[0], count:items.length};
+  });
+  $('recommendations').innerHTML = grouped.map(g=>{
+    if(q && !(g.cat.toLowerCase().includes(q) || (g.best && JSON.stringify(g.best).toLowerCase().includes(q)))) return '';
+    if(!g.best) return `<div class="miniCard"><b>${escapeHtml(g.cat)}</b><p>No saved Divinity for this category yet.</p></div>`;
+    const v=verdict(g.best.score);
+    const d=neededMatchDetails(g.best);
+    const stats=statTagsForItem(g.best, 7);
+    const dmgLine = ($('recommendStyle').value === 'damage' || $('recommendStyle').value === 'dpsPhysical') ? `<br><span class="good">${escapeHtml(damageGainLabel(g.best))}</span>` : '';
+    const dpsLine = $('recommendStyle').value === 'dpsPhysical' ? `<br><span class="good">${escapeHtml(dpsBalanceLabel(g.best))}</span>` : '';
+    const matchLine = d.needed.length && $('recommendStyle').value !== 'dpsPhysical' ? `<br><span class="good">Matched: ${escapeHtml(d.matches.join(', ') || 'None')}</span>${d.missing.length?`<br><span class="muted">Missing: ${escapeHtml(d.missing.join(', '))}</span>`:''}` : '';
+    return `<div class="miniCard"><b>${escapeHtml(g.cat)} — <span class="${v[1]}">${g.best.score}</span></b><p><span class="quality ${g.best.quality}">${g.best.quality}</span> Lv. ${clampLevel(g.best.level||1)} ${g.best.flash?' · Flash':''}${dmgLine}${dpsLine}<br><span class="tags">${stats}</span>${matchLine}<br>${escapeHtml((g.best.affixes||[]).map(a=>a.family+' '+a.level).join(', ')||'No affix')}<br><span class="muted">${g.count} saved in this category. ${v[0]} pick.</span></p></div>`;
+  }).join('') || '<p class="muted">No matches.</p>';
+}
+function renderSetEffects(){
+  const counts = Object.fromEntries(affixFamilies.map(f=>[f,0]));
+  inventory.forEach(it=>{
+    const fams = [...new Set((it.affixes||[]).map(a=>a.family))];
+    fams.forEach(f=>{ if(counts[f]!==undefined) counts[f]++; });
+  });
+  $('setEffects').innerHTML = affixFamilies.map(f=>{
+    const c = counts[f]; const active = c>=6?'6-piece active':c>=3?'3-piece active':`${Math.max(0,3-c)} more for 3-piece`;
+    const cls = c>=6?'good':c>=3?'warn':'muted';
+    const desc = c>=6 ? setEffects[f].six : c>=3 ? setEffects[f].three : setEffects[f].three;
+    return `<div class="setLine"><span><b>${f}</b><br><span class="muted">${escapeHtml(desc)}</span></span><span class="${cls}">${c}/6<br>${active}</span></div>`;
+  }).join('');
+}
+function renderStatRef(){
+  $('statRef').innerHTML = `<thead><tr><th>Stat group</th><th>Stat</th><th>Blue</th><th>Purple</th><th>Gold</th></tr></thead><tbody>` + allStats.map(stat=>{
+    const custom = q => statOverrides?.[stat]?.[q] !== undefined ? ' title="Custom value"' : '';
+    const cell = q => `<input class="statValueInput" data-stat="${escapeAttr(stat)}" data-quality="${q}" value="${escapeAttr(statValue(stat,q))}" placeholder="${escapeAttr(defaultStatValue(stat,q))}"${custom(q)}>`;
+    return `<tr><td>${escapeHtml(statGroup(stat))}</td><td><b>${escapeHtml(stat)}</b></td><td>${cell('Blue')}</td><td>${cell('Purple')}</td><td>${cell('Gold')}</td></tr>`;
+  }).join('') + `</tbody>`;
+}
+function saveStatValuesFromTable(showAlert=true){
+  const next = {};
+  [...document.querySelectorAll('.statValueInput')].forEach(input=>{
+    const stat = input.dataset.stat;
+    const quality = input.dataset.quality;
+    const text = String(input.value || '').trim();
+    if(text && text !== defaultStatValue(stat, quality)){
+      if(!next[stat]) next[stat] = {};
+      next[stat][quality] = text;
+    }
+  });
+  statOverrides = next;
+  persistStatOverrides();
+  renderStatLineSelectors(getRawStatLineValues());
+  renderInventory();
+  renderRecommendations();
+  renderStatRef();
+  setStatus(`Saved ${Object.keys(statOverrides).length} customized stat row${Object.keys(statOverrides).length===1?'':'s'}.`);
+  if(showAlert) alert('Stat values saved.');
+}
+function resetStatValues(){
+  if(!confirm('Reset customized stat values back to the shared default baseline?')) return;
+  statOverrides = {};
+  persistStatOverrides();
+  renderStatLineSelectors(getRawStatLineValues());
+  renderAll();
+  setStatus('Reset to shared default values.');
+}
+function renderAffixRef(){
+  $('affixRef').innerHTML = affixFamilies.map(f=>`<div class="miniCard"><b>${f}</b><p><b>3-piece:</b> ${escapeHtml(setEffects[f].three)}<br><b>6-piece:</b> ${escapeHtml(setEffects[f].six)}</p></div>`).join('');
+}
+function renderAffixDescriptions(affixes){
+  $('affixDescriptions').innerHTML = (affixes||[]).map(a=>`<div class="miniCard"><b>${escapeHtml(a.family)} ${a.level}</b><p>${escapeHtml(affixDescriptions[a.family]?.[a.level]||'')}</p></div>`).join('');
+}
+function renderAll(){ updateStatLineInfo(); updateNeededStatHint(); renderPreview(); renderInventory(); renderRecommendations(); renderSetEffects(); renderStatRef(); renderAffixRef(); renderDamageSummary(); }
+function persist(){ setAppItem(APP_DATA_KEYS.inventory, JSON.stringify(inventory)); }
+function load(){ try{ inventory = JSON.parse(getAppItem(APP_DATA_KEYS.inventory)||'[]') || []; normalizeInventory(); persist(); }catch(e){inventory=[];} }
+function exportData(){
+  $('importExport').classList.remove('hidden');
+  $('importExport').value = JSON.stringify({version:28, loginGate:true, sharedStatDefaultsForNewUsers:true, builtInDefaultStatVersion:BUILT_IN_STAT_DEFAULT_VERSION, accountScopedData:true, freshWorkspaceOnSignup:true, finalPDmgAndSizePriority:true, sizeAttributeCounterPriority:false, flashPriorityScoring:true, flashReference:{sameFinalDmg:84,differentFinalDmg:28,durationSeconds:10,cooldownSeconds:20,allRaceDamage:5}, currentLargeSizeBuildPreset:true, targetBalancedDpsGoals:true, dpsBalancedRecommendation:true, gatheredStatOverview:true, finalPDmgBonusCalculator:true, neededStatRecommendation:true, tabbedInventoryAndStatReference:true, damageFormulaRecommendation:true, inventoryCategoryFilter:true, elementStats:"combined-enhance-only", statLineMode:"ordered-dropdowns", statLineCaps:STAT_LINE_CAP_BY_QUALITY, exportedAt:new Date().toISOString(), maxDivinityLevel:MAX_DIVINITY_LEVEL, inventory, statOverrides, statDefaults:snapshotCurrentDefaultStatValues(), globalStatDefaults:getGlobalDefaultStatValues(), neededStats:getNeededStats(), currentLargeBuildPreset:CURRENT_LARGE_BUILD_PRESET, calcSettings:Object.fromEntries(CALC_INPUT_IDS.map(id=>[id, $(id)?.value]).filter(x=>x[1]!==undefined))}, null, 2);
+  $('importExport').select();
+}
+function importData(){
+  if($('importExport').classList.contains('hidden')){ $('importExport').classList.remove('hidden'); $('importExport').placeholder='Paste exported JSON here, then click Import JSON again.'; return; }
+  try{
+    const data = JSON.parse($('importExport').value);
+    const arr = Array.isArray(data) ? data : data.inventory;
+    if(!Array.isArray(arr)) throw new Error('Invalid JSON');
+    inventory = arr;
+    normalizeInventory();
+    if(data && !Array.isArray(data) && data.statDefaults){
+      applyDefaultStatValues(data.statDefaults);
+      const importedDefaults = snapshotCurrentDefaultStatValues();
+      saveGlobalDefaultStatValues(importedDefaults);
+      setAppItem(APP_DATA_KEYS.statDefaults, JSON.stringify(importedDefaults));
+    }
+    if(data && !Array.isArray(data) && data.statOverrides){
+      statOverrides = data.statOverrides || {};
+      migrateStatOverrides();
+      persistStatOverrides();
+    }
+    if(data && !Array.isArray(data) && Array.isArray(data.neededStats)){
+      setNeededStats(data.neededStats);
+    }
+    if(data && !Array.isArray(data) && data.calcSettings){
+      Object.entries(data.calcSettings || {}).forEach(([id,value]) => { const el=$(id); if(el) el.value=value; });
+      saveCalcSettings(false);
+    }
+    persist(); renderAll(); alert('Imported successfully.');
+  }catch(e){ alert('Import failed. Paste a valid exported JSON.'); }
+}
+function activateTab(name){
+  document.querySelectorAll('.tabBtn').forEach(btn=>btn.classList.toggle('active', btn.dataset.tabTarget===name));
+  document.querySelectorAll('.tabSection').forEach(sec=>sec.classList.toggle('hidden', sec.dataset.tab!==name));
+  setAppItem(APP_DATA_KEYS.activeTab, name);
+}
+function loadActiveTab(){
+  const saved = getAppItem(APP_DATA_KEYS.activeTab) || 'selector';
+  activateTab(['selector','inventory','statref'].includes(saved) ? saved : 'selector');
+}
+window.editItem=editItem; window.deleteItem=deleteItem;
+initAuth();
+</script>
+
+<script>
+  // Enables installable PWA mode when this folder is hosted on HTTPS/localhost.
+  if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('./sw.js').catch(function(err){
+        console.warn('Service worker registration failed:', err);
+      });
+    });
+  }
+</script>
+</body>
+</html>
